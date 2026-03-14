@@ -13,19 +13,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Име на ястие
+                @* @Html.DisplayNameFor(model => model.Name) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Алергени
+                @* @Html.DisplayNameFor(model => model.Alergens) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Litre)
+                Грамаж
+                @* @Html.DisplayNameFor(model => model.Grammage) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Цена
+                @* @Html.DisplayNameFor(model => model.Price) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CoverImage)
+                Картина
+                @* @Html.DisplayNameFor(model => model.CoverImage) *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TypeOrders)
@@ -49,7 +54,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CoverImage)
+                    <img src="@item.CoverImage" width="100" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TypeOrders.Id)

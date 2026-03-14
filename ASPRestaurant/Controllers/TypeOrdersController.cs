@@ -55,6 +55,7 @@ namespace ASPRestaurant.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,RegisterOn")] TypeOrder typeOrder)
         {
+           
             if (ModelState.IsValid)
             {
                 _context.Add(typeOrder);
@@ -85,8 +86,9 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RegisterOn")] TypeOrder typeOrder)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] TypeOrder typeOrder)
         {
+
             if (id != typeOrder.Id)
             {
                 return NotFound();

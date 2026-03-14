@@ -47,7 +47,7 @@ namespace ASPRestaurant.Controllers
         // GET: Drinks/Create
         public IActionResult Create()
         {
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Id");
+            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Litre,Price,CoverImage,TypeOrderId")] Drink drink)
+        public async Task<IActionResult> Create([Bind("Name,Description,Litre,Price,CoverImage,TypeOrderId")] Drink drink)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace ASPRestaurant.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Id", drink.TypeOrderId);
+            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
             return View(drink);
         }
 

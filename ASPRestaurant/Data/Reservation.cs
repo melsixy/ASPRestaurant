@@ -13,6 +13,5 @@ namespace ASPRestaurant.Data
         public int TableId { get; set; }
         public Table Tables { get; set; }
         public DateTime RegisterOn { get; set; }
-      
     }
 }

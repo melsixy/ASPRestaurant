@@ -1771,3 +1771,4 @@ C:\Users\User\Desktop\ASPRestaurant\ASPRestaurant\ASPRestaurant\obj\Debug\net9.0
 C:\Users\User\Desktop\ASPRestaurant\ASPRestaurant\ASPRestaurant\obj\Debug\net9.0\ASPRestaurant.pdb
 C:\Users\User\Desktop\ASPRestaurant\ASPRestaurant\ASPRestaurant\obj\Debug\net9.0\ASPRestaurant.genruntimeconfig.cache
 C:\Users\User\Desktop\ASPRestaurant\ASPRestaurant\ASPRestaurant\obj\Debug\net9.0\ref\ASPRestaurant.dll
+C:\Users\User\Desktop\ASPRestaurant\ASPRestaurant\ASPRestaurant\obj\Debug\net9.0\ASPRestaurant.sourcelink.json
