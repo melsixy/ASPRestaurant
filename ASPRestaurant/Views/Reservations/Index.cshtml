@@ -13,22 +13,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfPeople)
+                Брой клиенти
+                @* @Html.DisplayNameFor(model => model.NumberOfPeople) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                Дата
+               @*  @Html.DisplayNameFor(model => model.Date) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                Час
+                @* @Html.DisplayNameFor(model => model.Time) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Clients)
+                Клиент
+               @*  @Html.DisplayNameFor(model => model.Clients) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tables)
+                Маса
+               @*  @Html.DisplayNameFor(model => model.Tables) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RegisterOn)
+                Регистриран в
+                @* @Html.DisplayNameFor(model => model.RegisterOn) *@
             </th>
             <th></th>
         </tr>
@@ -46,10 +52,10 @@
                 @Html.DisplayFor(modelItem => item.Time)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Clients.Id)
+                @(item.Clients.UserName + " "+item.Clients.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tables.Id)
+                @Html.DisplayFor(modelItem => item.Tables.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RegisterOn)

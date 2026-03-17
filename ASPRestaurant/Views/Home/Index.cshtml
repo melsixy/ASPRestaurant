@@ -1,9 +1,37 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начало";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero секция -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>Kulinarnicata</h1>
+        <p>Вкусът на Гърция във вашия град</p>
+        <a href="#popular" class="btn btn-primary btn-lg">Виж популярни ястия</a>
+    </div>
+</header>
 
+<!-- Популярни ястия -->
+<section id="popular" class="menu-section py-5">
+    <div class="container text-center">
+        <h2>Популярни ястия</h2>
+        <p>Изберете от любимите на нашите клиенти ястия.</p>
+        <div class="menu-cards d-flex flex-wrap justify-content-center gap-4 mt-4">
+            <div class="menu-card">
+                <img src="~/images/greek-salad.jpg" alt="Гръцка салата">
+                <h3>Гръцка салата</h3>
+                <p>Свежи зеленчуци, сирене Фета и маслини.</p>
+            </div>
+            <div class="menu-card">
+                <img src="~/images/moussaka.jpg" alt="Мусака">
+                <h3>Мусака</h3>
+                <p>Традиционна запечена мусака с кайма и зеленчуци.</p>
+            </div>
+            <div class="menu-card">
+                <img src="~/images/souvlaki.jpg" alt="Сувлаки">
+                <h3>Сувлаки</h3>
+                <p>Мариновано месо на шиш, приготвено на грил.</p>
+            </div>
+        </div>
+    </div>
+</section>

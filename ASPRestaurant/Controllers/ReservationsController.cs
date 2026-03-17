@@ -6,16 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASPRestaurant.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ASPRestaurant.Controllers
 {
+   [Authorize] 
     public class ReservationsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        
 
-        public ReservationsController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<Client> _userManager;
+        public ReservationsController(ApplicationDbContext context, UserManager<Client> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Reservations
@@ -48,8 +54,8 @@ namespace ASPRestaurant.Controllers
         // GET: Reservations/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Id");
+            //ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description");
             return View();
         }
 
@@ -58,8 +64,10 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NumberOfPeople,Date,Time,ClientId,TableId,RegisterOn")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("NumberOfPeople,Date,Time,TableId")] Reservation reservation)
         {
+            reservation.RegisterOn = DateTime.Now;
+            reservation.ClientId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 _context.Add(reservation);
@@ -84,8 +92,8 @@ namespace ASPRestaurant.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", reservation.ClientId);
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Id", reservation.TableId);
+            //ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", reservation.ClientId);
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description", reservation.TableId);
             return View(reservation);
         }
 
@@ -94,7 +102,7 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NumberOfPeople,Date,Time,ClientId,TableId,RegisterOn")] Reservation reservation)
+        public async Task<IActionResult> Edit(int id, [Bind("NumberOfPeople,Date,Time,TableId")] Reservation reservation)
         {
             if (id != reservation.Id)
             {

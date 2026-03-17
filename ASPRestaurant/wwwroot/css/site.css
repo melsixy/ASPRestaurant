@@ -1,31 +1,115 @@
-html {
-  font-size: 14px;
+/* Hero секция */
+.hero {
+    background-image: url('~/images/hero-greek.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    position: relative;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    .hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+    }
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
 }
 
-body {
-  margin-bottom: 60px;
+.hero .btn-primary {
+    background-color: #89CFF0;
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    transition: 0.3s;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    .hero .btn-primary:hover {
+        background-color: #5DADE2;
+    }
+
+/* Секции */
+.about-section, .menu-section, .contact-section {
+    padding: 80px 20px;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    .about-section h2, .menu-section h2, .contact-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+/* Карти меню */
+.menu-cards {
+    gap: 20px;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    max-width: 300px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .menu-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .menu-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .menu-card h3 {
+        font-size: 1.5rem;
+        margin: 15px 0 10px;
+    }
+
+    .menu-card p {
+        font-size: 1rem;
+        padding: 0 15px 20px;
+        color: #666;
+    }
+
+/* Responsive */
+@media (max-width:768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .menu-cards {
+        flex-direction: column;
+        align-items: center;
+    }
 }
