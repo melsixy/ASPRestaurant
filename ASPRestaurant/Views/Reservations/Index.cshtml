@@ -1,71 +1,91 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Reservation>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Резервации</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create">Добави нов запис</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                Брой клиенти
-                @* @Html.DisplayNameFor(model => model.NumberOfPeople) *@
-            </th>
-            <th>
-                Дата
-               @*  @Html.DisplayNameFor(model => model.Date) *@
-            </th>
-            <th>
-                Час
-                @* @Html.DisplayNameFor(model => model.Time) *@
-            </th>
-            <th>
-                Клиент
-               @*  @Html.DisplayNameFor(model => model.Clients) *@
-            </th>
-            <th>
-                Маса
-               @*  @Html.DisplayNameFor(model => model.Tables) *@
-            </th>
-            <th>
-                Регистриран в
-                @* @Html.DisplayNameFor(model => model.RegisterOn) *@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfPeople)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @(item.Clients.UserName + " "+item.Clients.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tables.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegisterOn)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				Брой клиенти
+			</th>
+			<th>
+				Дата
+			</th>
+			<th>
+				Час
+			</th>
+			<th>
+				Клиент
+			</th>
+			<th>
+				Маса
+			</th>
+			<th>
+				Статус
+			</th>
+			<th>
+				Регистрирана
+				@* @Html.DisplayNameFor(model => model.RegisterOn) *@
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.NumberOfPeople)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Date)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Time)
+				</td>
+				<td>
+					@(item.Clients.UserName + " " + item.Clients.LastName)
+				</td>
+				<td>
+					@(item.Tables != null
+									? "Маса №" + item.Tables.TableNumber + " - " + item.Tables.Description
+									: "Няма маса")
+			</td>
+			<td>
+			<td>
+				@{
+						var start = item.Date.Date.Add(item.Time);
+						var end = start.AddHours(2);
+						var now = DateTime.Now;
+					}
+
+					@if (now >= start && now <= end)
+					{
+						<span style="color:red">Заета</span>
+					}
+					else
+					{
+						<span style="color:green">Свободна</span>
+					}
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RegisterOn)
+				</td>
+				<td>
+					@if (User.IsInRole("Admin"))
+					{
+						<a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
+						<a asp-action="Delete" asp-route-id="@item.Id"> | Изтрий | </a>
+					}
+					<a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>

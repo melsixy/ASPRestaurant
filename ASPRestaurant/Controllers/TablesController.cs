@@ -21,9 +21,11 @@ namespace ASPRestaurant.Controllers
         // GET: Tables
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tables.ToListAsync());
-        }
+            await UpdateTableStatuses();
 
+            var tables = await _context.Tables.ToListAsync();
+            return View(tables);
+        }
         // GET: Tables/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -151,6 +153,32 @@ namespace ASPRestaurant.Controllers
         private bool TableExists(int id)
         {
             return _context.Tables.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> UpdateTableStatuses()
+        {
+            var now = DateTime.Now;
+
+            var tables = await _context.Tables
+                .Include(t => t.Reservations)
+                .ToListAsync();
+
+            var model = tables.Select(t => new Table
+            {
+                Id = t.Id,
+                TableNumber = t.TableNumber,
+                Description = t.Description,
+                Count = t.Count,
+
+                IsAvailable = !t.Reservations.Any(r =>
+                {
+                    var start = r.Date.Add(r.Time);
+                    var end = start.AddHours(2);
+
+                    return now >= start && now <= end;
+                })
+            }).ToList();
+
+            return View(model);
         }
     }
 }

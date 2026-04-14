@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ASPRestaurant.Controllers
 {
-   [Authorize] 
+    [Authorize]
     public class ReservationsController : Controller
     {
-        
+
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Client> _userManager;
@@ -27,8 +27,12 @@ namespace ASPRestaurant.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reservations.Include(r => r.Clients).Include(r => r.Tables);
-            return View(await applicationDbContext.ToListAsync());
+            var reservations = await _context.Reservations
+                .Include(r => r.Tables)
+                .Include(r => r.Clients)
+                .ToListAsync();
+
+            return View(reservations);
         }
 
         // GET: Reservations/Details/5
@@ -54,8 +58,17 @@ namespace ASPRestaurant.Controllers
         // GET: Reservations/Create
         public IActionResult Create()
         {
-            //ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description");
+            ViewData["TableId"] = new SelectList(
+                _context.Tables
+                    .Select(t => new
+                    {
+                        t.Id,
+                        Name = "Маса №" + t.TableNumber + " - " + t.Description
+                    }),
+                "Id",
+                "Name"
+            );
+
             return View();
         }
 
@@ -64,19 +77,62 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumberOfPeople,Date,Time,TableId")] Reservation reservation)
+        public async Task<IActionResult> Create(Reservation reservation)
         {
             reservation.RegisterOn = DateTime.Now;
             reservation.ClientId = _userManager.GetUserId(User);
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["TableId"] = new SelectList(
+                    _context.Tables.Select(t => new
+                    {
+                        t.Id,
+                        Name = "Маса №" + t.TableNumber + " - " + t.Description
+                    }),
+                    "Id",
+                    "Name"
+                );
+
+                return View(reservation);
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", reservation.ClientId);
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Id", reservation.TableId);
-            return View(reservation);
+
+            var start = reservation.Date.Date.Add(reservation.Time);
+            var end = start.AddHours(2);
+
+            var reservations = await _context.Reservations.ToListAsync();
+
+            bool isTaken = reservations.Any(r =>
+            {
+                var rStart = r.Date.Date.Add(r.Time);
+                var rEnd = rStart.AddHours(2);
+
+                return r.TableId == reservation.TableId &&
+                       start < rEnd &&
+                       end > rStart;
+            });
+
+            if (isTaken)
+            {
+                ModelState.AddModelError("", "Масата е заета!");
+
+                ViewData["TableId"] = new SelectList(
+                    _context.Tables.Select(t => new
+                    {
+                        t.Id,
+                        Name = "Маса №" + t.TableNumber + " - " + t.Description
+                    }),
+                    "Id",
+                    "Name"
+                );
+
+                return View(reservation);
+            }
+
+            _context.Add(reservation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Reservations/Edit/5
@@ -172,6 +228,32 @@ namespace ASPRestaurant.Controllers
         private bool ReservationExists(int id)
         {
             return _context.Reservations.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> UpdateTableStatuses()
+        {
+            var now = DateTime.Now;
+
+            var tables = await _context.Tables
+                .Include(t => t.Reservations)
+                .ToListAsync();
+
+            var model = tables.Select(t => new Table
+            {
+                Id = t.Id,
+                TableNumber = t.TableNumber,
+                Description = t.Description,
+                Count = t.Count,
+
+                IsAvailable = !t.Reservations.Any(r =>
+                {
+                    var start = r.Date.Add(r.Time);
+                    var end = start.AddHours(2);
+
+                    return now >= start && now <= end;
+                })
+            }).ToList();
+
+            return View(model);
         }
     }
 }

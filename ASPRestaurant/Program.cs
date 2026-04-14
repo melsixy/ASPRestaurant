@@ -27,6 +27,9 @@ namespace ASPRestaurant
             builder.Services.AddRazorPages();
             builder.Services.AddControllers(op => op.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
             var app = builder.Build();
+            //await app.PrepareDataBase();
+
+
             app.PrepareDataBase().Wait();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -54,6 +57,7 @@ namespace ASPRestaurant
                .WithStaticAssets();
 
             app.Run();
+
         }
     }
 }

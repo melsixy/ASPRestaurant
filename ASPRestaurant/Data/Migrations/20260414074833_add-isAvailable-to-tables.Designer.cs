@@ -4,6 +4,7 @@ using ASPRestaurant.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASPRestaurant.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414074833_add-isAvailable-to-tables")]
+    partial class addisAvailabletotables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,34 +227,12 @@ namespace ASPRestaurant.Data.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<int>("TableAreaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TableNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TableAreaId");
-
                     b.ToTable("Tables");
-                });
-
-            modelBuilder.Entity("ASPRestaurant.Data.TableArea", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TableArea");
                 });
 
             modelBuilder.Entity("ASPRestaurant.Data.TypeOrder", b =>
@@ -452,17 +433,6 @@ namespace ASPRestaurant.Data.Migrations
                     b.Navigation("Tables");
                 });
 
-            modelBuilder.Entity("ASPRestaurant.Data.Table", b =>
-                {
-                    b.HasOne("ASPRestaurant.Data.TableArea", "TableAreas")
-                        .WithMany("Tables")
-                        .HasForeignKey("TableAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TableAreas");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -522,11 +492,6 @@ namespace ASPRestaurant.Data.Migrations
             modelBuilder.Entity("ASPRestaurant.Data.Table", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("ASPRestaurant.Data.TableArea", b =>
-                {
-                    b.Navigation("Tables");
                 });
 
             modelBuilder.Entity("ASPRestaurant.Data.TypeOrder", b =>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASPRestaurant.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPRestaurant.Controllers
 {
@@ -45,6 +46,7 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Drinks/Create
+        [Authorize(Roles="Admin")]
         public IActionResult Create()
         {
             ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name");

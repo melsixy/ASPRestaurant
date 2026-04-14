@@ -4,47 +4,68 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Маси</h1>
+
+@if (Model.Any(x => x.IsAvailable))
+{
+    <p class="text-success">
+        Свободни маси: @Model.Count(x => x.IsAvailable)
+    </p>
+}
+
+@if (Model.Any(x => !x.IsAvailable))
+{
+    <p class="text-danger">
+        Заети маси: @Model.Count(x => !x.IsAvailable)
+    </p>
+}
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Добави нова маса</a>
 </p>
-<table class="table">
+
+<table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>
-                Описание
-                @* @Html.DisplayNameFor(model => model.Description) *@
-            </th>
-            <th>
-                Номер на маса
-                @*@Html.DisplayNameFor(model => model.TableNumber) *@
-            </th>
-            <th>
-                Брой
-                @*@Html.DisplayNameFor(model => model.Count) *@
-            </th>
+            <th>Описание</th>
+            <th>Номер на маса</th>
+            <th>Брой места</th>
+            <th>Статус</th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TableNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Count)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Description</td>
+                <td>@item.TableNumber</td>
+                <td>@item.Count</td>
+
+                <td>
+                    @if (item.IsAvailable)
+                    {
+                        <span class="text-success fw-bold">Свободна</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger fw-bold">Заета</span>
+                    }
+                </td>
+
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
+                        <span> | </span>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
+                        <span> | </span>
+                    }
+
+                    <a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
