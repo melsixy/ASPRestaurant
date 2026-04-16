@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ASPRestaurant.Data.TypeOrder>
+﻿@* @model IEnumerable<ASPRestaurant.Data.TypeOrder>
 
 @{
     ViewData["Title"] = "Index";
@@ -40,4 +40,60 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@
+
+
+
+@model IEnumerable<ASPRestaurant.Data.TypeOrder>
+
+@{
+    ViewData["Title"] = "Категории";
+}
+
+<h1 class="page-title">Категории</h1>
+
+<p class="text-center">
+    <a asp-action="Create" class="btn btn-primary">+ Добави категория</a>
+</p>
+
+<div class="category-grid">
+
+    @foreach (var item in Model)
+    {
+        <div class="category-card">
+
+            <h3>@item.Name</h3>
+
+            <p class="text-muted">
+                Създадена: @item.RegisterOn.ToString("dd.MM.yyyy")
+            </p>
+
+            <div class="actions">
+
+                <a asp-action="Details"
+                   asp-route-id="@item.Id"
+                   class="btn btn-primary btn-sm">
+                    Детайли
+                </a>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@item.Id"
+                       class="btn btn-warning btn-sm">
+                        Редактирай
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.Id"
+                       class="btn btn-danger btn-sm">
+                        Изтрий
+                    </a>
+                }
+
+            </div>
+
+        </div>
+    }
+
+</div>

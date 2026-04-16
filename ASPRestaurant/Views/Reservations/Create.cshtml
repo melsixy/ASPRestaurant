@@ -4,13 +4,14 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Резарвация</h1>
 
 <h4>Reservation</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div class="form-box">
+
+    <form asp-action="Create">
+            <input type="hidden" asp-for="TableId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NumberOfPeople" class="control-label"></label>

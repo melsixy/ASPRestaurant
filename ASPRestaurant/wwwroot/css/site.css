@@ -1,84 +1,152 @@
-/* Hero секция */
-.hero {
-    background-image: url('~/images/hero-greek.jpg');
-    background-size: cover;
-    background-position: center;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    color: #222;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+    background: linear-gradient(135deg, #4ea8de, #5dade2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+    .navbar a {
+        color: white !important;
+        font-weight: 500;
+    }
+
+/* ================= HERO ================= */
+.hero-section {
     height: 90vh;
+    background: url('/images/hero-greek.jpg') center/cover no-repeat;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
     text-align: center;
-    position: relative;
 }
 
-    .hero::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.4);
-    }
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+}
 
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    color: white;
     max-width: 700px;
 }
 
-.hero h1 {
-    font-size: 3rem;
+    .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+    }
+
+    .hero-content p {
+        font-size: 1.3rem;
+        margin: 15px 0;
+    }
+
+.hero-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #89CFF0;
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    .hero-btn:hover {
+        background: #5DADE2;
+    }
+
+/* ================= TITLES ================= */
+h1, .page-title {
+    text-align: center;
+    margin: 20px 0;
     font-weight: 800;
-    letter-spacing: 2px;
-    margin-bottom: 0.5rem;
+    color: #4ea8de;
 }
 
-.hero p {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
+/* ================= TABLE (GENERAL) ================= */
+.table {
+    width: 95%;
+    margin: 20px auto;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.hero .btn-primary {
-    background-color: #89CFF0;
-    border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 50px;
-    transition: 0.3s;
-}
-
-    .hero .btn-primary:hover {
-        background-color: #5DADE2;
+    .table thead {
+        background: #4ea8de;
+        color: white;
     }
 
-/* Секции */
-.about-section, .menu-section, .contact-section {
-    padding: 80px 20px;
-}
-
-    .about-section h2, .menu-section h2, .contact-section h2 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
     }
 
-/* Карти меню */
-.menu-cards {
-    gap: 20px;
+    .table tbody tr:hover {
+        background: #f0f8ff;
+    }
+
+/* ================= RESERVATIONS TABLE ================= */
+.res-table {
+    width: 95%;
+    margin: auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+    .res-table thead {
+        background: linear-gradient(135deg,#4ea8de,#5dade2);
+        color: white;
+    }
+
+    .res-table th,
+    .res-table td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .res-table tbody tr:nth-child(even) {
+        background: #f6faff;
+    }
+
+    .res-table tbody tr:hover {
+        background: #eaf4ff;
+        transition: 0.2s;
+    }
+
+/* ================= MENU CARDS ================= */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
 }
 
 .menu-card {
     background: white;
-    border-radius: 15px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    max-width: 300px;
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: 0.3s;
 }
 
     .menu-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
     }
 
     .menu-card img {
@@ -87,29 +155,158 @@
         object-fit: cover;
     }
 
-    .menu-card h3 {
-        font-size: 1.5rem;
-        margin: 15px 0 10px;
+.menu-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #5DADE2;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 50px 0 20px;
+    color: #4ea8de;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    width: 80px;
+    height: 4px;
+    background: #89CFF0;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 10px;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 50px 0 20px;
+    color: #4ea8de;
+}
+
+    .section-title::after {
+        content: "";
+        width: 80px;
+        height: 4px;
+        background: #89CFF0;
+        display: block;
+        margin: 10px auto 0;
+        border-radius: 10px;
     }
 
-    .menu-card p {
-        font-size: 1rem;
-        padding: 0 15px 20px;
-        color: #666;
+.section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 40px auto 20px;
+    text-align: center;
+    color: #4ea8de;
+    border-bottom: 3px solid #89CFF0;
+    width: fit-content;
+    padding-bottom: 5px;
+}
+/* ================= TABLE CARDS ================= */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.table-card {
+    background: linear-gradient(135deg,#fff,#f0f8ff);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border-left: 6px solid #4ea8de;
+    text-align: center;
+    transition: 0.3s;
+}
+
+    .table-card:hover {
+        transform: translateY(-10px);
     }
 
-/* Responsive */
-@media (max-width:768px) {
-    .hero h1 {
+/* STATUS */
+.free {
+    color: #1db954;
+    font-weight: bold;
+}
+
+.busy {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* ================= BUTTONS ================= */
+.btn, a {
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+/* ================= GALLERY ================= */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    width: 90%;
+    margin: auto;
+}
+
+    .gallery-grid img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: 0.3s;
+    }
+
+        .gallery-grid img:hover {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+
+/* ================= CONTACT ================= */
+.contact-page {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.contact-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    min-width: 300px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
         font-size: 2.2rem;
-    }
-
-    .hero p {
-        font-size: 1rem;
-    }
-
-    .menu-cards {
-        flex-direction: column;
-        align-items: center;
     }
 }

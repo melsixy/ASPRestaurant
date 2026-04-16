@@ -1,71 +1,158 @@
-﻿@model IEnumerable<ASPRestaurant.Data.Table>
+﻿@* @model IEnumerable<ASPRestaurant.Data.Table>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Маси</h1>
 
 @if (Model.Any(x => x.IsAvailable))
 {
-    <p class="text-success">
-        Свободни маси: @Model.Count(x => x.IsAvailable)
-    </p>
+	<p class="text-success">
+		Свободни маси: @Model.Count(x => x.IsAvailable)
+	</p>
 }
 
 @if (Model.Any(x => !x.IsAvailable))
 {
-    <p class="text-danger">
-        Заети маси: @Model.Count(x => !x.IsAvailable)
-    </p>
+	<p class="text-danger">
+		Заети маси: @Model.Count(x => !x.IsAvailable)
+	</p>
 }
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Добави нова маса</a>
+	<a asp-action="Create" class="btn btn-primary">Добави нова маса</a>
 </p>
 
 <table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Описание</th>
-            <th>Номер на маса</th>
-            <th>Брой места</th>
-            <th>Статус</th>
-            <th></th>
-        </tr>
-    </thead>
+	<thead>
+		<tr>
+			<th>Описание</th>
+			<th>Номер на маса</th>
+			<th>Брой места</th>
+			<th>Статус</th>
+			<th></th>
+		</tr>
+	</thead>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Description</td>
-                <td>@item.TableNumber</td>
-                <td>@item.Count</td>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Description</td>
+				<td>@item.TableNumber</td>
+				<td>@item.Count</td>
 
-                <td>
-                    @if (item.IsAvailable)
-                    {
-                        <span class="text-success fw-bold">Свободна</span>
-                    }
-                    else
-                    {
-                        <span class="text-danger fw-bold">Заета</span>
-                    }
-                </td>
+				<td>
+					@if (item.Reservations != null &&
+									item.Reservations.Any(r => r.Date.Date == DateTime.Today))
+					{
+						<span class="text-danger fw-bold">Заета</span>
+					}
+					else
+					{
+						<span class="text-success fw-bold">Свободна</span>
+					}
+				</td>
 
-                <td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
-                        <span> | </span>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
-                        <span> | </span>
-                    }
+				<td>
+					@if (User.IsInRole("Admin"))
+					{
+						<a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
+						<span> | </span>
+						<a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
+						<span> | </span>
+					}
 
-                    <a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+					<a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+
+					<span> | </span>
+
+					@if (User.Identity.IsAuthenticated)
+					{
+						<a asp-controller="Reservations"
+						   asp-action="Create"
+						   asp-route-tableId="@item.Id"
+						   class="text-primary fw-bold">
+							Резервирай
+						</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table> *@
+
+
+
+@model IEnumerable<ASPRestaurant.Data.Table>
+
+@{
+	ViewData["Title"] = "Маси";
+}
+
+<h1 class="page-title">Маси</h1>
+
+<div class="stats">
+	<div class="stat free">
+		Свободни: @Model.Count(x => x.IsAvailable)
+	</div>
+
+	<div class="stat busy">
+		Заети: @Model.Count(x => !x.IsAvailable)
+	</div>
+</div>
+
+<p>
+	<a asp-action="Create" class="btn btn-primary">+ Добави маса</a>
+</p>
+
+<div class="tables-grid">
+
+	@foreach (var item in Model)
+	{
+		<div class="table-card">
+
+			<h3>Маса №@item.TableNumber</h3>
+
+			<p>@item.Description</p>
+
+			<p>Места: <b>@item.Count</b></p>
+
+			<p>
+				@if (item.Reservations != null &&
+							item.Reservations.Any(r => r.Date.Date == DateTime.Today))
+				{
+					<span class="busy">Заета</span>
+				}
+				else
+				{
+					<span class="free">Свободна</span>
+				}
+			</p>
+
+			<div class="actions">
+
+				@if (User.IsInRole("Admin"))
+				{
+					<a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
+					<a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
+				}
+
+				<a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+
+				@if (User.Identity.IsAuthenticated)
+				{
+					<a asp-controller="Reservations"
+					   asp-action="Create"
+					   asp-route-tableId="@item.Id"
+					   class="reserve-btn">
+						Резервирай
+					</a>
+				}
+
+			</div>
+		</div>
+	}
+
+</div>

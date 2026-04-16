@@ -21,9 +21,10 @@ namespace ASPRestaurant.Controllers
         // GET: Tables
         public async Task<IActionResult> Index()
         {
-            await UpdateTableStatuses();
+            var tables = await _context.Tables
+                .Include(t => t.Reservations)
+                .ToListAsync();
 
-            var tables = await _context.Tables.ToListAsync();
             return View(tables);
         }
         // GET: Tables/Details/5

@@ -12,18 +12,18 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #89CFF0;">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">Кулинарницата</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> *@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Начало</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#popular">Популярни ястия</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#interior">Интериор</a></li>
                     <li class="nav-item"><a class="nav-link" href="/reservations">Резервации</a></li>
                     <li class="nav-item"><a class="nav-link" href="/tables">Маси</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/meals">Меню-ястия</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/drinks">Меню-напитки</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/meals">Ястия</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/drinks">Напитки</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/Gallery">Галерия</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/Contact">Контакти</a></li>
 
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {

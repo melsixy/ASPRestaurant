@@ -56,20 +56,15 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Reservations/Create
-        public IActionResult Create()
+        public IActionResult Create(int tableId)
         {
-            ViewData["TableId"] = new SelectList(
-                _context.Tables
-                    .Select(t => new
-                    {
-                        t.Id,
-                        Name = "Маса №" + t.TableNumber + " - " + t.Description
-                    }),
-                "Id",
-                "Name"
-            );
+            var reservation = new Reservation
+            {
+                TableId = tableId,
+                Date = DateTime.Now
+            };
 
-            return View();
+            return View(reservation);
         }
 
         // POST: Reservations/Create
@@ -129,7 +124,7 @@ namespace ASPRestaurant.Controllers
                 return View(reservation);
             }
 
-            _context.Add(reservation);
+          _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
