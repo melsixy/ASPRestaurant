@@ -5,9 +5,12 @@
 }
 
 <h1>Резервации</h1>
-<p>
-	<a asp-action="Create">Добави нов запис</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+	<p class="text-center">
+		<a asp-action="Create" class="btn btn-primary">+ Добави резервация</a>
+	</p>
+}
 <table class="table">
 	<thead>
 		<tr>

@@ -15,11 +15,19 @@ body {
         color: white !important;
         font-weight: 500;
     }
+    .navbar .navbar-brand {
+        color: white;
+        font-weight: 700;
+        font-style: italic;
+    }
 
 /* ================= HERO ================= */
 .hero-section {
-    height: 90vh;
-    background: url('/images/hero-greek.jpg') center/cover no-repeat;
+    height: 700px;
+    background-image: url("https://www.siriusbeach.com/wp-content/uploads/2025/12/skybar11.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     position: relative;
     display: flex;
     justify-content: center;
@@ -30,7 +38,7 @@ body {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.45);
 }
 
 .hero-content {
@@ -42,6 +50,7 @@ body {
 
     .hero-content h1 {
         font-size: 3.5rem;
+        font-style:italic;
         font-weight: 900;
     }
 
@@ -183,15 +192,15 @@ h1, .page-title {
     position: relative;
 }
 
-.section-title::after {
-    content: "";
-    width: 80px;
-    height: 4px;
-    background: #89CFF0;
-    display: block;
-    margin: 10px auto 0;
-    border-radius: 10px;
-}
+    .section-title::after {
+        content: "";
+        width: 80px;
+        height: 4px;
+        background: #89CFF0;
+        display: block;
+        margin: 10px auto 0;
+        border-radius: 10px;
+    }
 
 .section-title {
     font-size: 2.2rem;
@@ -230,11 +239,10 @@ h1, .page-title {
 }
 
 .table-card {
-    background: linear-gradient(135deg,#fff,#f0f8ff);
+    background: linear-gradient(135deg,#8ac6f7,#c7f6f8);
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    border-left: 6px solid #4ea8de;
     text-align: center;
     transition: 0.3s;
 }
@@ -309,4 +317,125 @@ h1, .page-title {
     .hero-content h1 {
         font-size: 2.2rem;
     }
+}
+/*login register*/
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #89CFF0, #5DADE2);
+    padding: 20px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+}
+
+    .auth-box h2 {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .auth-box .form-control {
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    .auth-box .btn-primary {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: bold;
+        background: #89CFF0;
+        border: none;
+    }
+
+        .auth-box .btn-primary:hover {
+            background: #5DADE2;
+        }
+
+.auth-links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+    .auth-links a {
+        display: block;
+        margin-top: 8px;
+        color: #5DADE2;
+        text-decoration: none;
+    }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+/*create dizain*/
+.create-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #89CFF0, #5DADE2);
+    padding: 20px;
+}
+
+.create-card {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+}
+
+    .create-card h1 {
+        text-align: center;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .create-card h4 {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .create-card .form-control {
+        border-radius: 12px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .create-card label {
+        font-weight: 600;
+        margin-top: 8px;
+    }
+
+    .create-card .btn-primary {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px;
+        background: #89CFF0;
+        border: none;
+        font-weight: bold;
+    }
+
+        .create-card .btn-primary:hover {
+            background: #5DADE2;
+        }
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    color: #5DADE2;
+    text-decoration: none;
 }

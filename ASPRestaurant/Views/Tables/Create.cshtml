@@ -1,43 +1,22 @@
 ﻿@model ASPRestaurant.Data.Table
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="create-page">
+    <div class="create-card">
 
-<h1>Create</h1>
+        <h1>Маса</h1>
+        <h4>Добавяне на нова маса</h4>
 
-<h4>Table</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TableNumber" class="control-label"></label>
-                <input asp-for="TableNumber" class="form-control" />
-                <span asp-validation-for="TableNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Count" class="control-label"></label>
-                <input asp-for="Count" class="form-control" />
-                <span asp-validation-for="Count" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+
+            <input asp-for="Description" class="form-control" placeholder="Описание" />
+            <input asp-for="TableNumber" class="form-control" placeholder="Номер" />
+            <input asp-for="Count" class="form-control" placeholder="Брой места" />
+
+            <button type="submit" class="btn btn-primary mt-2">Запази</button>
+
         </form>
+
+        <a asp-action="Index" class="back-link">⬅ Назад</a>
+
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
