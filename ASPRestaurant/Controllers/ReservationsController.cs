@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using ASPRestaurant.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-
 namespace ASPRestaurant.Controllers
+
 {
     [Authorize]
     public class ReservationsController : Controller
@@ -25,6 +25,7 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Reservations
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var reservations = await _context.Reservations
@@ -218,6 +219,19 @@ namespace ASPRestaurant.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyReservations()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var reservations = await _context.Reservations
+                .Include(r => r.Tables)
+                .Where(r => r.ClientId == userId)
+                .ToListAsync();
+
+            return View(reservations);
         }
 
         private bool ReservationExists(int id)

@@ -1,12 +1,15 @@
 wwwroot\favicon.ico
 wwwroot\images\beachview.png
 wwwroot\images\gardenview.jpg
+wwwroot\images\greeksalad.jpg
 wwwroot\images\interior.jpg
 wwwroot\images\kitchenchef.jpg
 wwwroot\images\meals.png
+wwwroot\images\musaka.jpg
 wwwroot\images\personal.jpg
 wwwroot\images\restaurantinterior.jpg
 wwwroot\images\seaview.png
+wwwroot\images\sulvaki.jpg
 wwwroot\images\windowview.jpg
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css

@@ -4,51 +4,42 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="details-page">
 
-<div>
-    <h4>Drink</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Litre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Litre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CoverImage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CoverImage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TypeOrders)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TypeOrders.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="details-card">
+
+        <!-- СНИМКА -->
+        <img src="@Model.CoverImage" class="details-img" />
+
+        <!-- ИНФО -->
+        <div class="details-body">
+
+            <h2>@Model.Name</h2>
+
+            <p class="text-muted">@Model.Description</p>
+
+            <div class="details-info">
+                <span> @Model.Litre L</span>
+                <span class="price">@Model.Price €</span>
+            </div>
+
+            <div class="details-type">
+                Тип: @Model.TypeOrders?.Name
+            </div>
+
+            <!-- БУТОНИ -->
+            <div class="details-actions">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                    Редактирай
+                </a>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Назад
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

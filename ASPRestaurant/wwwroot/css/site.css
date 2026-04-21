@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f4f6f9;
+    background:#aac2db;
     margin: 0;
     color: #222;
 }
@@ -12,7 +12,7 @@ body {
 }
 
     .navbar a {
-        color: white !important;
+        color: white;
         font-weight: 500;
     }
     .navbar .navbar-brand {
@@ -24,7 +24,7 @@ body {
 /* ================= HERO ================= */
 .hero-section {
     height: 700px;
-    background-image: url("https://www.siriusbeach.com/wp-content/uploads/2025/12/skybar11.png");
+    background-image: url("https://hauteliving.com/wp-content/uploads/2014/07/Malibu-Beach-4-e1459299492318.jpg");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -35,29 +35,35 @@ body {
     text-align: center;
 }
 
+/* overlay (по-мек и модерен) */
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(1.5px);
 }
 
+/* съдържание върху снимката */
 .hero-content {
     position: relative;
     z-index: 2;
     color: white;
-    max-width: 600px;
+    max-width: 650px;
+    padding: 20px;
 }
 
     .hero-content h1 {
-        font-size: 3.5rem;
+        font-size: 3.2rem;
         font-weight: 900;
+        margin-bottom: 10px;
     }
 
     .hero-content p {
-        font-size: 1.3rem;
-        margin: 15px 0;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
     }
 
+/* бутон */
 .hero-btn {
     display: inline-block;
     padding: 12px 30px;
@@ -66,10 +72,12 @@ body {
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
+    transition: 0.3s;
 }
 
     .hero-btn:hover {
-        background: #508ed4;
+        background: #4ea8de;
+        transform: scale(1.05);
     }
 
 /* ================= TITLES ================= */
@@ -109,10 +117,10 @@ h1, .page-title {
     width: 95%;
     margin: auto;
     border-collapse: collapse;
-    background: white;
+    background: #57e2cf;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.50);
 }
 
     .res-table thead {
@@ -437,4 +445,208 @@ h1, .page-title {
     margin-top: 12px;
     color: #5DADE2;
     text-decoration: none;
+}
+/*DELETE DESIGN*/
+.delete-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-card {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+    .delete-card h2 {
+        font-weight: 800;
+    }
+
+    .delete-card dl {
+        text-align: left;
+        margin-top: 20px;
+    }
+/* ================= DETAILS GLOBAL ================= */
+
+.details-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f4f9ff;
+}
+
+/* CARD */
+.details-card {
+    width: 100%;
+    max-width: 550px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    transition: 0.3s;
+}
+
+    .details-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* IMAGE (за Drink/Meal) */
+.details-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* BODY */
+.details-body {
+    padding: 20px;
+    text-align: center;
+}
+
+    .details-body h2 {
+        font-weight: 900;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+.text-muted {
+    color: #777;
+}
+
+/* INFO ROWS (Tables, Reservations, TypeOrders) */
+.reservation-info {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+    .info-row span {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .info-row b {
+        color: #222;
+    }
+
+/* PRICE */
+.price {
+    color: #4ea8de;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+/* BUTTONS */
+.details-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    .details-actions .btn {
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-weight: 600;
+    }
+
+/* SPECIAL BOX (Alergens) */
+.alergens {
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 10px;
+    font-size: 0.95rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .details-card {
+        max-width: 95%;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+
+
+/* ================= EDIT / CREATE / DELETE ================= */
+
+.form-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #eaf4ff;
+    padding: 20px;
+}
+
+.form-card {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+    .form-card h1,
+    .form-card h4 {
+        text-align: center;
+        color: #4ea8de;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #cfe3f3;
+}
+
+    .form-control:focus {
+        border-color: #4ea8de;
+        box-shadow: 0 0 0 0.2rem rgba(78,168,222,0.2);
+    }
+
+.btn-primary {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    background: #4ea8de;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #3c90c0;
+    }
+
+.btn-danger {
+    border-radius: 10px;
+}
+
+.btn-secondary {
+    border-radius: 10px;
 }

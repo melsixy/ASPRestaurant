@@ -172,8 +172,10 @@ namespace ASPRestaurant.Controllers
 
                 IsAvailable = !t.Reservations.Any(r =>
                 {
-                    var start = r.Date.Add(r.Time);
-                    var end = start.AddHours(2);
+                    var reservationStart = r.Date.Date + r.Time;
+
+                    var start = reservationStart.AddMinutes(-30);
+                    var end = reservationStart.AddHours(2).AddMinutes(10);
 
                     return now >= start && now <= end;
                 })

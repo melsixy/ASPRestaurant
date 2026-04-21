@@ -4,51 +4,61 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="details-page">
 
-<div>
-    <h4>Reservation</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfPeople)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfPeople)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Time)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Time)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Clients)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Clients.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tables)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tables.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegisterOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegisterOn)
-        </dd>
-    </dl>
+    <div class="details-card">
+
+        <h2>Резервация</h2>
+
+        <p class="text-muted">Детайли за резервацията</p>
+
+        <hr />
+
+        <div class="reservation-info">
+
+            <div class="info-row">
+                <span>Хора:</span>
+                <b>@Model.NumberOfPeople</b>
+            </div>
+
+            <div class="info-row">
+                <span>Дата:</span>
+                <b>@Model.Date.ToShortDateString()</b>
+            </div>
+
+            <div class="info-row">
+                <span>Час:</span>
+                <b>@Model.Time</b>
+            </div>
+
+            <div class="info-row">
+                <span>🪑 Маса:</span>
+                <b>@Model.Tables?.TableNumber</b>
+            </div>
+
+            <div class="info-row">
+                <span>Клиент:</span>
+                <b>@Model.Clients?.UserName</b>
+            </div>
+
+            <div class="info-row">
+                <span>Създадена:</span>
+                <b>@Model.RegisterOn</b>
+            </div>
+
+        </div>
+
+        <div class="details-actions mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                Редактирай
+            </a>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Назад
+            </a>
+        </div>
+
+    </div>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
