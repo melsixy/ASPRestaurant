@@ -2,38 +2,93 @@
     ViewData["Title"] = "Начало";
 }
 
-<!-- Hero секция -->
 <header class="hero-section">
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
         <h1>Кулинарницата</h1>
         <p>Вкусът на Гърция в твоя град</p>
-        <a href="/reservations" class="hero-btn">Резервирай сега</a>
+        <a href="/Reservations" class="hero-btn">Резервирай сега</a>
     </div>
 </header>
 
-<!-- Популярни ястия -->
-<section id="popular" class="menu-section py-5">
-    <div class="container text-center">
-        <h2>Популярни ястия</h2>
-        <p>Изберете от любимите на нашите клиенти ястия.</p>
-        <div class="menu-cards d-flex flex-wrap justify-content-center gap-4 mt-4">
-            <div class="menu-card">
-                <img src="/images/greeksalad.jpg" alt="Гръцка салата">
-                <h3>Гръцка салата</h3>
-                <p>Свежи зеленчуци, сирене Фета и маслини.</p>
+<!-- ПОПУЛЯРНИ ЯСТИЯ -->
+<section class="menu-section">
+    <div class="container">
+        <h2 class="section-title">Популярни ястия</h2>
+
+        <div class="master-grid">
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38" />
+                <div class="master-card-body">
+                    <h3>Гръцка салата</h3>
+                    <p>Свежи зеленчуци и сирене Фета</p>
+                    <p class="price">12.90 лв.</p>
+                </div>
             </div>
-            <div class="menu-card">
-                <img src="/images/musaka.jpg" alt="Мусака">
-                <h3>Мусака</h3>
-                <p>Традиционна запечена мусака с кайма и зеленчуци.</p>
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90" />
+                <div class="master-card-body">
+                    <h3>Мусака</h3>
+                    <p>Традиционна гръцка мусака</p>
+                    <p class="price">18.50 лв.</p>
+                </div>
             </div>
-            <div class="menu-card">
-                <img src="/images/sulvaki.jpg" alt="Сувлаки">
-                <h3>Сувлаки</h3>
-                <p>Мариновано месо на шиш, приготвено на грил.</p>
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1599974571344-2c796844c34c" />
+                <div class="master-card-body">
+                    <h3>Сувлаки</h3>
+                    <p>Гриловано месо на шиш</p>
+                    <p class="price">16.90 лв.</p>
+                </div>
             </div>
+
         </div>
+    </div>
+</section>
+
+<!-- НАПИТКИ -->
+<section class="menu-section">
+    <div class="container">
+        <h2 class="section-title">Напитки</h2>
+
+        <div class="master-grid">
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307" />
+                <div class="master-card-body">
+                    <h3>Гръцко вино</h3>
+                    <p class="price">24.90 лв.</p>
+                </div>
+            </div>
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e" />
+                <div class="master-card-body">
+                    <h3>Фреш портокал</h3>
+                    <p class="price">6.50 лв.</p>
+                </div>
+            </div>
+
+            <div class="master-card">
+                <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2" />
+                <div class="master-card-body">
+                    <h3>Гръцка бира</h3>
+                    <p class="price">8.90 лв.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>Готови за гръцко преживяване?</h2>
+        <a href="/Reservations" class="hero-btn">Резервирай сега</a>
     </div>
 </section>

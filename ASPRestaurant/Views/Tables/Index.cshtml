@@ -1,73 +1,73 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Table>
 
 @{
-	ViewData["Title"] = "Маси";
+    ViewData["Title"] = "Маси";
 }
 
-<h1 class="page-title">Маси</h1>
+<h1 class="section-title">Маси</h1>
 
-<div class="stats">
-	<div class="stat free">
-		Свободни: @Model.Count(x => x.IsAvailable)
-	</div>
+<!-- ФИЛТРИ (оставяме ги) -->
+<div class="filter-section mb-4">
+    <div class="row">
 
-	<div class="stat busy">
-		Заети: @Model.Count(x => !x.IsAvailable)
-	</div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Търси по номер..." id="searchInput">
+        </div>
+
+        <div class="col-md-4">
+            <select class="form-control" id="statusFilter">
+                <option value="">Всички маси</option>
+                <option value="available">Свободни</option>
+                <option value="unavailable">Заети</option>
+            </select>
+        </div>
+
+    </div>
 </div>
 
 @if (User.IsInRole("Admin"))
 {
-	<p class="text-center">
-		<a asp-action="Create" class="btn btn-primary">+ Добави маса</a>
-	</p>
+    <div class="text-center mb-4">
+        <a asp-action="Create" class="btn btn-primary">Нова маса</a>
+    </div>
 }
 
-<div class="tables-grid">
+<!-- TABLES GRID (MASTER STYLE) -->
+<div class="master-grid">
 
-	@foreach (var item in Model)
-	{
-		<div class="table-card">
+@foreach (var item in Model)
+{
+    <div class="master-card table-card @(item.IsAvailable ? "available" : "unavailable")">
 
-			<h3>Маса №@item.TableNumber</h3>
+       @*  <img src="@(item.ImageUrl ?? "https://via.placeholder.com/300x200")" /> *@
 
-			<p>@item.Description</p>
+        <div class="master-card-body">
 
-			<p>Места: <b>@item.Count</b></p>
+            <h3>Маса @item.TableNumber</h3>
 
-			<p>
-				@if (item.IsAvailable)
-				{
-					<span class="text-success">Свободна</span>
-				}
-				else
-				{
-					<span class="text-danger">Заета</span>
-				}
-			</p>
+            <p>@item.Count места</p>
 
-			<div class="actions">
+            <p class="@(item.IsAvailable ? "table-free" : "table-reserved")">
+                @(item.IsAvailable ? "Свободна" : "Заета")
+            </p>
 
-				@if (User.IsInRole("Admin"))
-				{
-					<a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a>
-					<a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
-				}
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                Детайли
+            </a>
 
-				<a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+            @if (User.Identity.IsAuthenticated && item.IsAvailable)
+            {
+                <a asp-controller="Reservations"
+                   asp-action="Create"
+                   asp-route-tableId="@item.Id"
+                   class="btn btn-success btn-sm">
+                    Резервирай
+                </a>
+            }
 
-				@if (User.Identity.IsAuthenticated)
-				{
-					<a asp-controller="Reservations"
-					   asp-action="Create"
-					   asp-route-tableId="@item.Id"
-					   class="reserve-btn">
-						Резервирай
-					</a>
-				}
+        </div>
 
-			</div>
-		</div>
-	}
+    </div>
+}
 
 </div>

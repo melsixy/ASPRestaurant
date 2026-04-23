@@ -1,29 +1,72 @@
 ﻿@model ASPRestaurant.Data.Reservation
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Изтрий резервация";
 }
 
 <div class="delete-page">
-
     <div class="delete-card">
-
-        <h3 class="text-danger">Изтриване</h3>
-
-        <p>Сигурни ли сте, че искате да изтриете: <b>@Model.Id</b> ?</p>
-
-        <form asp-action="Delete">
+        <h2>Потвърдете изтриване</h2>
+        <p>Сигурни ли сте, че искате да изтриете тази резервация?</p>
+        
+        <div class="delete-details">
+            <h3>Резервация #@Model.Id</h3>
+            
+            <dl>
+                <dt>Дата</dt>
+                <dd>@Model.Date.ToString("dd.MM.yyyy")</dd>
+                
+                <dt>Час</dt>
+                <dd>@Model.Time.ToString(@"hh\:mm")</dd>
+                
+                <dt>Брой хора</dt>
+                <dd>@Model.NumberOfPeople</dd>
+                
+                <dt>Маса</dt>
+                <dd>
+                    @if (Model.Tables != null)
+                    {
+                        <span class="status-badge status-available">Маса @Model.Tables.TableNumber</span>
+                        <small class="text-muted">@Model.Tables.Description</small>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Без маса</span>
+                    }
+                </dd>
+                
+                <dt>Клиент</dt>
+                <dd>@Model.Clients?.UserName</dd>
+                
+                <dt>Регистрирана на</dt>
+                <dd>@Model.RegisterOn.ToString("dd.MM.yyyy HH:mm")</dd>
+            </dl>
+        </div>
+        
+        <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="Id" />
-
-            <button type="submit" class="btn btn-danger">
-                Изтрий
-            </button>
-
-            <a asp-action="Index" class="btn btn-secondary">
-                Отказ
-            </a>
+            
+            <div class="delete-actions">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Изтрий
+                </button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Отмени
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+            </div>
         </form>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script>
+        // Анимация при зареждане
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.delete-card');
+            card.style.animation = 'fadeInUp 0.6s ease-out';
+        });
+    </script>
+}

@@ -1,29 +1,94 @@
 ﻿@model ASPRestaurant.Data.Table
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Изтрий маса";
 }
 
 <div class="delete-page">
-
     <div class="delete-card">
-
-        <h3 class="text-danger">Изтриване</h3>
-
-        <p>Сигурни ли сте, че искате да изтриете: <b>@Model.Id</b> ?</p>
-
-        <form asp-action="Delete">
+        <h2>Потвърдете изтриване</h2>
+        <p>Сигурни ли сте, че искате да изтриете тази маса?</p>
+        
+        <div class="delete-details">
+            <h3>Маса №@Model.TableNumber</h3>
+            
+            <dl>
+                <dt>Описание</dt>
+                <dd>@Model.Description</dd>
+                
+                <dt>Капацитет</dt>
+                <dd>@Model.Count места</dd>
+                
+                <dt>Локация</dt>
+                <dd>
+                    @if (Model.TableNumber <= 2)
+                    {
+                        <span class="status-badge status-available">До прозореца</span>
+                    }
+                    else if (Model.TableNumber <= 4)
+                    {
+                        <span class="status-badge status-available">Централна</span>
+                    }
+                    else if (Model.TableNumber <= 6)
+                    {
+                        <span class="status-badge status-available">На терасата</span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-available">Тераса</span>
+                    }
+                </dd>
+                
+                <dt>Статус</dt>
+                <dd>
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="status-badge status-available">Свободна</span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-busy">Заета</span>
+                    }
+                </dd>
+                
+                <dt>Резервации</dt>
+                <dd>
+                    @if (Model.Reservations != null)
+                    {
+                        <span>@Model.Reservations.Count() активни резервации</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Няма резервации</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        
+        <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="Id" />
-
-            <button type="submit" class="btn btn-danger">
-                Изтрий
-            </button>
-
-            <a asp-action="Index" class="btn btn-secondary">
-                Отказ
-            </a>
+            
+            <div class="delete-actions">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Изтрий
+                </button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Отмени
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+            </div>
         </form>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script>
+        // Анимация при зареждане
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.delete-card');
+            card.style.animation = 'fadeInUp 0.6s ease-out';
+        });
+    </script>
+}

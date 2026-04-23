@@ -1,75 +1,106 @@
-﻿
-@model IEnumerable<ASPRestaurant.Data.Meal>
+﻿@model IEnumerable<ASPRestaurant.Data.Meal>
 
 @{
-    ViewData["Title"] = "Меню";
+    ViewData["Title"] = "Ястия";
+    var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
 }
 
-<h1 class="page-title">Меню</h1>
+<div class="container py-4">
 
-@if (User.IsInRole("Admin"))
-{
-    <p class="text-center">
-        <a asp-action="Create" class="btn btn-primary">+ Добави ястие</a>
-    </p>
-}
+    <h1 class="section-title text-center mb-4">Нашите ястия</h1>
 
-@{
-    var categories = Model
-        .GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
-}
+    <!-- ФИЛТРИ -->
+    <div class="filter-section mb-4">
+        <div class="row justify-content-center">
 
-@foreach (var category in categories)
-{
-    <h2 class="section-title">@category.Key</h2>
+            <div class="col-md-4 mb-2">
+                <input type="text" class="form-control" placeholder="Търси..." id="searchInput">
+            </div>
 
-    <div class="menu-grid">
+            <div class="col-md-4 mb-2">
+                <select class="form-control" id="sortFilter">
+                    <option value="name">По име</option>
+                    <option value="price-asc">Цена ↑</option>
+                    <option value="price-desc">Цена ↓</option>
+                </select>
+            </div>
 
-        @foreach (var item in category)
-        {
-            <div class="menu-card">
+        </div>
+    </div>
 
-                <img src="@item.CoverImage" />
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="text-center mb-4">
+            <a asp-action="Create" class="btn btn-primary">
+                Добави ястие
+            </a>
+        </div>
+    }
 
-                <div class="menu-body">
+    @foreach (var group in grouped)
+    {
+        <h2 class="category-title text-center mt-5 mb-3">
+            @group.Key
+        </h2>
 
-                    <h3>@item.Name</h3>
+        <div class="row justify-content-center">
 
-                    <p class="text-muted">@item.Alergens</p>
+            @foreach (var item in group)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
 
-                    <p>Грамаж: <b>@item.Grammage</b></p>
+                    <div class="drink-card meal-card">
 
-                    <p class="price">@item.Price лв</p>
+                        <div class="drink-img">
+                            <img src="@(string.IsNullOrEmpty(item.CoverImage)
+                                        ? "https://via.placeholder.com/300x200"
+                                        : item.CoverImage)"
+                                 alt="@item.Name" />
+                        </div>
 
-                    <div class="actions">
+                        <div class="drink-body">
 
-                        <a asp-action="Details"
-                           asp-route-id="@item.Id"
-                           class="btn btn-primary btn-sm">
-                            Детайли
-                        </a>
+                            <h3>@item.Name</h3>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit"
-                               asp-route-id="@item.Id"
-                               class="btn btn-warning btn-sm">
-                                Редактирай
-                            </a>
+                            <p>@item.Alergens</p>
 
-                            <a asp-action="Delete"
-                               asp-route-id="@item.Id"
-                               class="btn btn-danger btn-sm">
-                                Изтрий
-                            </a>
-                        }
+                            <div class="drink-info">
+                                <span>@item.TypeOrders?.Name</span>
+                                <span class="price">@item.Price.ToString("F2") €</span>
+                            </div>
 
+                            <div class="drink-actions">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-info btn-sm">
+                                    Детайли
+                                </a>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-warning btn-sm">
+                                        Редактирай
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-danger btn-sm">
+                                        Изтрий
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
+            }
 
-            </div>
-        }
+        </div>
+    }
 
-    </div>
-}
+</div>

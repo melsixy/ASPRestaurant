@@ -1,22 +1,95 @@
 ﻿@model ASPRestaurant.Data.Table
 
+@{
+    ViewData["Title"] = "Нова маса";
+}
+
 <div class="create-page">
     <div class="create-card">
+        <h1>Добави нова маса</h1>
+        
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="TableNumber" class="form-label">Номер на маса</label>
+                        <input asp-for="TableNumber" class="form-control" type="number" min="1" placeholder="Въведете номер на масата" />
+                        <span asp-validation-for="TableNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Count" class="form-label">Капацитет</label>
+                        <input asp-for="Count" class="form-control" type="number" min="1" max="20" placeholder="Брой места" />
+                        <span asp-validation-for="Count" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
 
-        <h1>Маса</h1>
-        <h4>Добавяне на нова маса</h4>
+            <div class="form-group">
+                <label asp-for="Description" class="form-label">Описание</label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Опишете локацията на масата..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-        <form asp-action="Create">
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="IsAvailable" class="form-check-input" />
+                    <label asp-for="IsAvailable" class="form-check-label">Масата е налична</label>
+                </div>
+            </div>
 
-            <input asp-for="Description" class="form-control" placeholder="Описание" />
-            <input asp-for="TableNumber" class="form-control" placeholder="Номер" />
-            <input asp-for="Count" class="form-control" placeholder="Брой места" />
+            <!-- Визуализация на масата -->
+            <div class="table-preview">
+                <h3>Преглед на масата</h3>
+                <div class="table-layout">
+                    <div class="table-shape">
+                        <div class="table-number-preview">Маса <span id="previewNumber">?</span></div>
+                        <div class="table-seats" id="previewSeats">
+                            <!-- Местата ще се генерират динамично -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <button type="submit" class="btn btn-primary mt-2">Запази</button>
-
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Запази
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+            </div>
         </form>
-
-        <a asp-action="Index" class="back-link">⬅ Назад</a>
-
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Динамичен преглед на масата
+        document.getElementById('TableNumber').addEventListener('input', updateTablePreview);
+        document.getElementById('Count').addEventListener('input', updateTablePreview);
+
+        function updateTablePreview() {
+            const tableNumber = document.getElementById('TableNumber').value || '?';
+            const seatCount = parseInt(document.getElementById('Count').value) || 0;
+            
+            document.getElementById('previewNumber').textContent = tableNumber;
+            
+            const seatsContainer = document.getElementById('previewSeats');
+            seatsContainer.innerHTML = '';
+            
+            // Генериране на места около масата
+            for (let i = 0; i < seatCount; i++) {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                seat.textContent = i + 1;
+                seatsContainer.appendChild(seat);
+            }
+        }
+    </script>
+}

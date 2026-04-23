@@ -1,48 +1,118 @@
 ﻿@model ASPRestaurant.Data.Table
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детайли за маса";
 }
 
 <div class="details-page">
-
     <div class="details-card">
-
-        <h2>Маса №@Model.TableNumber</h2>
-
-        <p class="text-muted">@Model.Description</p>
-
-        <hr />
-
-        <div class="reservation-info">
-
-            <div class="info-row">
-                <span>Номер:</span>
-                <b>@Model.TableNumber</b>
+        <div class="details-body">
+            <h1 class="details-title">Маса №@Model.TableNumber</h1>
+            
+            <div class="details-info">
+                <div class="info-item">
+                    <div class="info-label">Номер</div>
+                    <div class="info-value">@Model.TableNumber</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Описание</div>
+                    <div class="info-value">@Model.Description</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Капацитет</div>
+                    <div class="info-value">@Model.Count места</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Локация</div>
+                    <div class="info-value">
+                        @if (Model.TableNumber <= 2)
+                        {
+                            <span class="status-badge status-available">До прозореца</span>
+                        }
+                        else if (Model.TableNumber <= 4)
+                        {
+                            <span class="status-badge status-available">Централна</span>
+                        }
+                        else if (Model.TableNumber <= 6)
+                        {
+                            <span class="status-badge status-available">На терасата</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-available">Тераса</span>
+                        }
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Статус</div>
+                    <div class="info-value">
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="status-badge status-available">Свободна</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-busy">Заета</span>
+                        }
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Резервации</div>
+                    <div class="info-value">
+                        @if (Model.Reservations != null)
+                        {
+                            <span>@Model.Reservations.Count() активни</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Няма резервации</span>
+                        }
+                    </div>
+                </div>
             </div>
-
-            <div class="info-row">
-                <span>Капацитет:</span>
-                <b>@Model.Count човека</b>
+            
+            <div class="details-actions">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Редактирай
+                    </a>
+                    
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Изтрий
+                    </a>
+                }
+                
+                @if (User.Identity.IsAuthenticated && Model.IsAvailable)
+                {
+                    <a asp-controller="Reservations" asp-action="Create" asp-route-tableId="@Model.Id" class="btn btn-success">
+                        <i class="fas fa-calendar-plus"></i> Резервирай
+                    </a>
+                }
+                
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+                
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i> Принтирай
+                </button>
             </div>
-
-            <div class="info-row">
-                <span>Описание:</span>
-                <b>@Model.Description</b>
-            </div>
-
         </div>
-
-        <div class="details-actions mt-3">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                Редактирай
-            </a>
-
-            <a asp-action="Index" class="btn btn-secondary">
-                Назад
-            </a>
-        </div>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script>
+        // Анимация при зареждане
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.details-card');
+            card.style.animation = 'fadeInUp 0.8s ease-out';
+        });
+    </script>
+}

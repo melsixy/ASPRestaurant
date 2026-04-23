@@ -1,45 +1,73 @@
 ﻿@model ASPRestaurant.Data.Drink
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
 }
 
 <div class="details-page">
-
     <div class="details-card">
-
-        <!-- СНИМКА -->
-        <img src="@Model.CoverImage" class="details-img" />
-
-        <!-- ИНФО -->
+        <img src="@Model.CoverImage" alt="@Model.Name" class="details-img">
+        
         <div class="details-body">
-
-            <h2>@Model.Name</h2>
-
-            <p class="text-muted">@Model.Description</p>
-
+            <h1 class="details-title">@Model.Name</h1>
+            
             <div class="details-info">
-                <span> @Model.Litre L</span>
-                <span class="price">@Model.Price €</span>
+                <div class="info-item">
+                    <div class="info-label">Цена</div>
+                    <div class="info-value">@Model.Price.ToString("F2") лв.</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Количество</div>
+                    <div class="info-value">@Model.Litre</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Категория</div>
+                    <div class="info-value">@Model.TypeOrders?.Name</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Κατηγορία</div>
+                    <div class="info-value">@Model.TypeOrders?.Name</div>
+                </div>
             </div>
-
-            <div class="details-type">
-                Тип: @Model.TypeOrders?.Name
+            
+            <div class="description-section">
+                <h3>Περιγραφή</h3>
+                <p>@Model.Description</p>
             </div>
-
-            <!-- БУТОНИ -->
+            
             <div class="details-actions">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                    Редактирай
+                <a asp-action="Create" asp-controller="Reservations" asp-route-drinkId="@Model.Id" class="btn btn-success">
+                    <i class="fas fa-shopping-cart"></i> Παραγγείλε
                 </a>
-
+                
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Επεξεργασία
+                    </a>
+                    
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Διαγραφή
+                    </a>
+                }
+                
                 <a asp-action="Index" class="btn btn-secondary">
-                    Назад
+                    <i class="fas fa-arrow-left"></i> Πίσω
                 </a>
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script>
+        // Animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.details-card');
+            card.style.animation = 'fadeInUp 0.8s ease-out';
+        });
+    </script>
+}
