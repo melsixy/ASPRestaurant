@@ -14,10 +14,9 @@ namespace ASPRestaurant.Controllers
     [Authorize]
     public class ReservationsController : Controller
     {
-
-
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Client> _userManager;
+
         public ReservationsController(ApplicationDbContext context, UserManager<Client> userManager)
         {
             _context = context;
@@ -25,38 +24,45 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Reservations
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var reservations = await _context.Reservations
+            var query = _context.Reservations
                 .Include(r => r.Tables)
                 .Include(r => r.Clients)
-                .ToListAsync();
+                .AsQueryable();
 
+            // ако НЕ е админ → вижда само неговите
+            if (!User.IsInRole("Admin"))
+            {
+                var userId = _userManager.GetUserId(User);
+                query = query.Where(r => r.ClientId == userId);
+            }
+
+            var reservations = await query.ToListAsync();
             return View(reservations);
         }
 
-        // GET: Reservations/Details/5
+        // GET: Details (само свои или admin)
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
 
             var reservation = await _context.Reservations
-                .Include(r => r.Clients)
                 .Include(r => r.Tables)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(r => r.Clients)
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
+
             if (reservation == null)
-            {
                 return NotFound();
-            }
 
             return View(reservation);
         }
 
-        // GET: Reservations/Create
+        // GET: Create
         public IActionResult Create(int tableId)
         {
             var reservation = new Reservation
@@ -68,9 +74,7 @@ namespace ASPRestaurant.Controllers
             return View(reservation);
         }
 
-        // POST: Reservations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reservation reservation)
@@ -79,165 +83,124 @@ namespace ASPRestaurant.Controllers
             reservation.ClientId = _userManager.GetUserId(User);
 
             if (!ModelState.IsValid)
-            {
-                ViewData["TableId"] = new SelectList(
-                    _context.Tables.Select(t => new
-                    {
-                        t.Id,
-                        Name = "Маса №" + t.TableNumber + " - " + t.Description
-                    }),
-                    "Id",
-                    "Name"
-                );
-
                 return View(reservation);
-            }
 
             var start = reservation.Date.Date.Add(reservation.Time);
             var end = start.AddHours(2);
 
-            var reservations = await _context.Reservations.ToListAsync();
-
-            bool isTaken = reservations.Any(r =>
-            {
-                var rStart = r.Date.Date.Add(r.Time);
-                var rEnd = rStart.AddHours(2);
-
-                return r.TableId == reservation.TableId &&
-                       start < rEnd &&
-                       end > rStart;
-            });
+            bool isTaken = await _context.Reservations.AnyAsync(r =>
+                r.TableId == reservation.TableId &&
+                start < r.Date.Date.Add(r.Time).AddHours(2) &&
+                end > r.Date.Date.Add(r.Time)
+            );
 
             if (isTaken)
             {
-                ModelState.AddModelError("", "Масата е заета!");
-
-                ViewData["TableId"] = new SelectList(
-                    _context.Tables.Select(t => new
-                    {
-                        t.Id,
-                        Name = "Маса №" + t.TableNumber + " - " + t.Description
-                    }),
-                    "Id",
-                    "Name"
-                );
-
+                ModelState.AddModelError("", "Масата е заета");
                 return View(reservation);
             }
 
-          _context.Reservations.Add(reservation);
+            _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Reservations/Edit/5
+        // GET: Edit (само свои или admin)
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var reservation = await _context.Reservations.FindAsync(id);
-            if (reservation == null)
-            {
-                return NotFound();
-            }
-            //ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", reservation.ClientId);
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description", reservation.TableId);
-            return View(reservation);
-        }
-
-        // POST: Reservations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NumberOfPeople,Date,Time,TableId")] Reservation reservation)
-        {
-            if (id != reservation.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(reservation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationExists(reservation.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", reservation.ClientId);
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Id", reservation.TableId);
-            return View(reservation);
-        }
-
-        // GET: Reservations/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var userId = _userManager.GetUserId(User);
 
             var reservation = await _context.Reservations
-                .Include(r => r.Clients)
-                .Include(r => r.Tables)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
+
             if (reservation == null)
-            {
                 return NotFound();
-            }
+
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description", reservation.TableId);
 
             return View(reservation);
         }
 
-        // POST: Reservations/Delete/5
+        // POST: Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Reservation reservation)
+        {
+            if (id != reservation.Id)
+                return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+
+            var existing = await _context.Reservations
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
+
+            if (existing == null)
+                return NotFound();
+
+            existing.NumberOfPeople = reservation.NumberOfPeople;
+            existing.Date = reservation.Date;
+            existing.Time = reservation.Time;
+            existing.TableId = reservation.TableId;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+
+            var reservation = await _context.Reservations
+                .Include(r => r.Tables)
+                .Include(r => r.Clients)
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
+
+            if (reservation == null)
+                return NotFound();
+
+            return View(reservation);
+        }
+
+        // POST: Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var userId = _userManager.GetUserId(User);
+
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
+
             if (reservation != null)
             {
                 _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        [Authorize]
-        public async Task<IActionResult> MyReservations()
-        {
-            var userId = _userManager.GetUserId(User);
-
-            var reservations = await _context.Reservations
-                .Include(r => r.Tables)
-                .Where(r => r.ClientId == userId)
-                .ToListAsync();
-
-            return View(reservations);
         }
 
         private bool ReservationExists(int id)
         {
             return _context.Reservations.Any(e => e.Id == id);
         }
+
+        // Table status (OK)
         public async Task<IActionResult> UpdateTableStatuses()
         {
             var now = DateTime.Now;
@@ -252,7 +215,6 @@ namespace ASPRestaurant.Controllers
                 TableNumber = t.TableNumber,
                 Description = t.Description,
                 Count = t.Count,
-
                 IsAvailable = !t.Reservations.Any(r =>
                 {
                     var start = r.Date.Add(r.Time);
