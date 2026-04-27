@@ -4,68 +4,38 @@
     ViewData["Title"] = Model.Name;
 }
 
-<div class="details-page">
-    <div class="details-card">
-        <img src="@Model.CoverImage" alt="@Model.Name" class="details-img">
-        
-        <div class="details-body">
-            <h1 class="details-title">@Model.Name</h1>
-            
-            <div class="details-info">
-                <div class="info-item">
-                    <div class="info-label">Цена</div>
-                    <div class="info-value">@Model.Price.ToString("F2") лв.</div>
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">Грамаж</div>
-                    <div class="info-value">@Model.Grammage г</div>
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">Категория</div>
-                    <div class="info-value">@Model.TypeOrders?.Name</div>
-                </div>
-                
-                            </div>
-            
-            <div class="alergens-section">
-                <h3>Алергени</h3>
-                <div class="alergen-info">
-                    <p>@Model.Alergens</p>
-                </div>
-            </div>
-            
-            <div class="details-actions">
-                <a asp-action="Create" asp-controller="Reservations" asp-route-mealId="@Model.Id" class="btn btn-success">
-                    <i class="fas fa-shopping-cart"></i> Поръчай
-                </a>
-                
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Редактирай
-                    </a>
-                    
-                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Изтрий
-                    </a>
-                }
-                
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="details-wrapper">
 
-@section Scripts {
-    <script>
-        // Анимация при зареждане
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.details-card');
-            card.style.animation = 'fadeInUp 0.8s ease-out';
-        });
-    </script>
-}
+    <div class="details-card">
+
+        <div class="details-image">
+            <img src="@(Model.CoverImage ?? "https://via.placeholder.com/600x400")" />
+        </div>
+
+        <div class="details-body">
+
+            <h1 class="details-title">@Model.Name</h1>
+
+            <p class="details-desc">@Model.Alergens</p>
+
+            <div class="details-info">
+
+                <div class="info-box">
+                    🍽 Категория: <strong>@Model.TypeOrders?.Name</strong>
+                </div>
+
+                <div class="info-box">
+                    ⚠️ Алергени: <strong>@Model.Alergens</strong>
+                </div>
+
+                <div class="info-box">
+                    💰 Цена: <strong>@Model.Price.ToString("F2") €</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

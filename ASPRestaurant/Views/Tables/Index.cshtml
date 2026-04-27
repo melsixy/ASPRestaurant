@@ -1,73 +1,133 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Table>
 
 @{
-    ViewData["Title"] = "Маси";
+	ViewData["Title"] = "Маси";
 }
 
 <h1 class="section-title">Маси</h1>
 
-<!-- ФИЛТРИ (оставяме ги) -->
+<!-- FILTERS -->
 <div class="filter-section mb-4">
-    <div class="row">
+	<div class="row justify-content-center">
 
-        <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Търси по номер..." id="searchInput">
-        </div>
+		<div class="col-md-4 mb-2">
+			<input type="text" class="form-control" placeholder="Търси по номер..." id="searchInput">
+		</div>
 
-        <div class="col-md-4">
-            <select class="form-control" id="statusFilter">
-                <option value="">Всички маси</option>
-                <option value="available">Свободни</option>
-                <option value="unavailable">Заети</option>
-            </select>
-        </div>
+		<div class="col-md-4 mb-2">
+			<select class="form-control" id="statusFilter">
+				<option value="">Всички маси</option>
+				<option value="available">Свободни</option>
+				<option value="unavailable">Заети</option>
+			</select>
+		</div>
 
-    </div>
+	</div>
 </div>
 
 @if (User.IsInRole("Admin"))
 {
-    <div class="text-center mb-4">
-        <a asp-action="Create" class="btn btn-primary">Нова маса</a>
-    </div>
+	<div class="text-center mb-4">
+		<a asp-action="Create" class="btn btn-primary">
+			Нова маса
+		</a>
+	</div>
 }
 
-<!-- TABLES GRID (MASTER STYLE) -->
-<div class="master-grid">
+<!-- GRID -->
+<div class="table-modern-grid">
 
-@foreach (var item in Model)
-{
-    <div class="master-card table-card @(item.IsAvailable ? "available" : "unavailable")">
+	<div class="table-modern-grid">
 
-       @*  <img src="@(item.ImageUrl ?? "https://via.placeholder.com/300x200")" /> *@
+		@foreach (var item in Model)
+		{
+			<div class="table-modern-card @(item.IsAvailable ? "free" : "busy")"
+				 data-number="@item.TableNumber"
+				 data-status="@(item.IsAvailable ? "available" : "unavailable")">
 
-        <div class="master-card-body">
+				<img src="@GetTableImage(item.TableNumber)" />
 
-            <h3>Маса @item.TableNumber</h3>
+				<div class="overlay">
 
-            <p>@item.Count места</p>
+					<h3>Маса @item.TableNumber</h3>
+					<p>@item.Description</p>
 
-            <p class="@(item.IsAvailable ? "table-free" : "table-reserved")">
-                @(item.IsAvailable ? "Свободна" : "Заета")
-            </p>
+					<div class="table-capacity">
+						👥 @item.Count места
+					</div>
 
-            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
-                Детайли
-            </a>
+					<span class="status-chip @(item.IsAvailable ? "green" : "red")">
+						@(item.IsAvailable ? "Свободна" : "Заета")
+					</span>
 
-            @if (User.Identity.IsAuthenticated && item.IsAvailable)
-            {
-                <a asp-controller="Reservations"
-                   asp-action="Create"
-                   asp-route-tableId="@item.Id"
-                   class="btn btn-success btn-sm">
-                    Резервирай
-                </a>
-            }
+					@if (User.Identity.IsAuthenticated && item.IsAvailable)
+					{
+						<a asp-controller="Reservations"
+						   asp-action="Create"
+						   asp-route-tableId="@item.Id"
+						   class="btn btn-success w-100 mt-2">
+							Резервирай
+						</a>
+					}
 
-        </div>
+				</div>
 
-    </div>
-}
+			</div>
+		}
+
+	</div>
 
 </div>
+
+@functions {
+	public string GetTableImage(int tableNumber)
+	{
+		if (tableNumber % 3 == 0)
+		{
+			return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21"; // море
+		}
+		else if (tableNumber % 3 == 1)
+		{
+			return "https://images.unsplash.com/photo-1505691938895-1758d7feb511"; // градина
+		}
+		else
+		{
+			return "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"; // тераса
+		}
+	}
+}
+@section Scripts {
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+
+				const searchInput = document.getElementById("searchInput");
+				const statusFilter = document.getElementById("statusFilter");
+				const cards = document.querySelectorAll(".table-card-modern");
+
+				function filterTables() {
+
+					const searchValue = searchInput.value.toLowerCase();
+					const statusValue = statusFilter.value;
+
+					cards.forEach(card => {
+
+						const number = card.getAttribute("data-number");
+						const status = card.getAttribute("data-status");
+
+						let matchSearch = number.includes(searchValue);
+						let matchStatus = statusValue === "" || status === statusValue;
+
+						if (matchSearch && matchStatus) {
+							card.style.display = "block";
+						} else {
+							card.style.display = "none";
+						}
+					});
+				}
+
+				searchInput.addEventListener("input", filterTables);
+				statusFilter.addEventListener("change", filterTables);
+
+			});
+		</script>
+}

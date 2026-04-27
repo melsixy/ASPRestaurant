@@ -1,54 +1,42 @@
-﻿@{
-    ViewData["Title"] = "Контакти";
-}
+﻿<h1 class="section-title">
+	Контакти
+</h1>
+<div class="master-grid contact-grid">
 
-<h1 class="page-title">Контакти</h1>
-
-<div class="contact-page">
-
-    <!-- Лява част -->
-    <div class="contact-box">
-
-        <h3>📍 Кулинарницата</h3>
-
-        <p>София, България</p>
-
-        <p>📞 +359 888 123 456</p>
-
-        <p>✉️ info@kulinarnicata.bg</p>
-
-        <p>⏰ Пон-Пет: 10:00 - 22:00</p>
-        <p>⏰ Съб-Нед: 11:00 - 23:00</p>
-
+    <div class="master-card contact-card">
+        <div class="master-card-body">
+            <h3>📍 Адрес</h3>
+            <p>София, България</p>
+        </div>
     </div>
 
-    <!-- Форма -->
-    <div class="contact-form">
+    <div class="master-card contact-card">
+        <div class="master-card-body">
+            <h3>📞 Телефон</h3>
+            <p>+359 888 123456</p>
+        </div>
+    </div>
 
-        <h3>Изпрати съобщение</h3>
-
-        <form>
-
-            <input type="text" placeholder="Име" class="form-control" />
-
-            <input type="email" placeholder="Имейл" class="form-control" />
-
-            <textarea placeholder="Съобщение" class="form-control"></textarea>
-
-            <button class="btn btn-primary w-100">
-                Изпрати
-            </button>
-
-        </form>
-
+    <div class="master-card contact-card">
+        <div class="master-card-body">
+            <h3>🕒 Работно време</h3>
+            <p>10:00 - 23:00</p>
+        </div>
     </div>
 
 </div>
 
-<!-- Карта -->
-<div class="map-box">
-    <iframe src=""
-            width="100%" height="300" style="border:0;" allowfullscreen="">
-    </iframe>
-</div>
+<!-- FORM -->
+<div class="form-card mt-5 contact-form">
+    <h3 class="text-center mb-4">Изпрати съобщение</h3>
 
+    <form>
+        <input class="form-control mb-3" placeholder="Име" />
+        <input class="form-control mb-3" placeholder="Email" />
+        <textarea class="form-control mb-3" placeholder="Съобщение"></textarea>
+
+        <button class="btn btn-primary w-100">
+            Изпрати
+        </button>
+    </form>
+</div>

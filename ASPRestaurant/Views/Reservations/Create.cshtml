@@ -4,126 +4,85 @@
     ViewData["Title"] = "Нова резервация";
 }
 
-<div class="create-page">
-    <div class="create-card">
+<div class="reservation-modern">
+
+    <div class="reservation-card">
+
         <h1>Направете резервация</h1>
-        
+
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-            
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- DATE / TIME -->
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Date" class="form-label">Дата</label>
-                        <input asp-for="Date" class="form-control" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                        <span asp-validation-for="Date" class="text-danger"></span>
-                    </div>
+                    <label>Дата</label>
+                    <input asp-for="Date" type="date" class="form-control" />
                 </div>
+
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Time" class="form-label">Час</label>
-                        <input asp-for="Time" class="form-control" type="time" />
-                        <span asp-validation-for="Time" class="text-danger"></span>
-                    </div>
+                    <label>Час</label>
+                    <input asp-for="Time" type="time" class="form-control" />
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="NumberOfPeople" class="form-label">Брой хора</label>
-                        <input asp-for="NumberOfPeople" class="form-control" type="number" min="1" max="20" />
-                        <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="TableId" class="form-label">Предпочитана маса</label>
-                        <select asp-for="TableId" class="form-control" asp-items="ViewBag.TableId">
-                            <option value="">Изберете маса</option>
-                        </select>
-                        <span asp-validation-for="TableId" class="text-danger"></span>
-                    </div>
-                </div>
+            <!-- PEOPLE -->
+            <div class="mt-3">
+                <label>Брой хора</label>
+                <input asp-for="NumberOfPeople" type="number" class="form-control" min="1" max="20" />
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Допълнителни изисквания</label>
-                <textarea class="form-control" rows="3" placeholder="Специални изисквания или бележи..."></textarea>
-            </div>
+            <!-- hidden TableId -->
+            <input type="hidden" asp-for="TableId" id="TableId" />
 
-            <!-- Достъпни маси -->
-            <div class="available-tables">
-                <h3>Свободни маси</h3>
-                <div class="table-grid" id="availableTables">
-                    <!-- Тук ще се заредят масите с JavaScript -->
+            <!-- ZONES -->
+            <h3 class="mt-4">Избери място</h3>
+
+            <div class="table-modern-grid">
+
+                <div class="table-modern" onclick="selectTable(1)">
+                    <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" />
+                    <div class="overlay">🌊 Гледка към морето</div>
                 </div>
+
+                <div class="table-modern" onclick="selectTable(2)">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" />
+                    <div class="overlay">🏖 Плаж</div>
+                </div>
+
+                <div class="table-modern" onclick="selectTable(3)">
+                    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511" />
+                    <div class="overlay">🌿 Градина</div>
+                </div>
+
+                <div class="table-modern" onclick="selectTable(4)">
+                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" />
+                    <div class="overlay">🌇 Тераса</div>
+                </div>
+
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-check"></i> Потвърди резервация
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </a>
-            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">
+                Запази резервация
+            </button>
+
         </form>
+
     </div>
+
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    
-    <script>
-        // Зареждане на свободни маси при промяна на дата и час
-        document.getElementById('Date').addEventListener('change', loadAvailableTables);
-        document.getElementById('Time').addEventListener('change', loadAvailableTables);
-        document.getElementById('NumberOfPeople').addEventListener('change', loadAvailableTables);
+<script>
+function selectTable(id) {
 
-        function loadAvailableTables() {
-            const date = document.getElementById('Date').value;
-            const time = document.getElementById('Time').value;
-            const people = document.getElementById('NumberOfPeople').value;
-            
-            if (!date || !time || !people) return;
-            
-            // Симулация на зареждане на маси
-            const tablesContainer = document.getElementById('availableTables');
-            tablesContainer.innerHTML = '<div class="loading"><div class="spinner-border"></div> Зареждане...</div>';
-            
-            setTimeout(() => {
-                const tables = [
-                    { id: 1, number: 1, description: 'До прозореца', capacity: 4 },
-                    { id: 2, number: 2, description: 'До прозореца', capacity: 4 },
-                    { id: 3, number: 3, description: 'Централна', capacity: 6 },
-                    { id: 4, number: 4, description: 'Централна', capacity: 6 },
-                    { id: 5, number: 5, description: 'На терасата', capacity: 8 },
-                    { id: 6, number: 6, description: 'На терасата', capacity: 8 }
-                ];
-                
-                tablesContainer.innerHTML = tables.map(table => `
-                    <div class="table-card ${table.capacity >= people ? 'available' : 'unavailable'}">
-                        <div class="table-number">Маса ${table.number}</div>
-                        <div class="table-desc">${table.description}</div>
-                        <div class="table-capacity">${table.capacity} места</div>
-                        ${table.capacity >= people ? 
-                            `<input type="radio" name="tableSelection" value="${table.id}" class="table-radio">` : 
-                            '<div class="table-disabled">Заета</div>'}
-                    </div>
-                `).join('');
-            }, 500);
-        }
+    document.getElementById("TableId").value = id;
 
-        // Автоматично избиране на маса при клик
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('table-card') && e.target.classList.contains('available')) {
-                const radio = e.target.querySelector('.table-radio');
-                if (radio) radio.checked = true;
-                
-                // Обновяване на dropdown за маса
-                document.getElementById('TableId').value = e.target.querySelector('.table-radio').value;
-            }
-        });
-    </script>
+    document.querySelectorAll(".table-modern")
+        .forEach(x => x.classList.remove("selected"));
+
+    event.currentTarget.classList.add("selected");
+}
+</script>
 }

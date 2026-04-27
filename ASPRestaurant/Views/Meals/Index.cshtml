@@ -9,25 +9,6 @@
 
     <h1 class="section-title text-center mb-4">Нашите ястия</h1>
 
-    <!-- ФИЛТРИ -->
-    <div class="filter-section mb-4">
-        <div class="row justify-content-center">
-
-            <div class="col-md-4 mb-2">
-                <input type="text" class="form-control" placeholder="Търси..." id="searchInput">
-            </div>
-
-            <div class="col-md-4 mb-2">
-                <select class="form-control" id="sortFilter">
-                    <option value="name">По име</option>
-                    <option value="price-asc">Цена ↑</option>
-                    <option value="price-desc">Цена ↓</option>
-                </select>
-            </div>
-
-        </div>
-    </div>
-
     @if (User.IsInRole("Admin"))
     {
         <div class="text-center mb-4">
@@ -49,16 +30,16 @@
             {
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
 
-                    <div class="drink-card meal-card">
+                    <div class="master-card">
 
-                        <div class="drink-img">
+                        <div>
                             <img src="@(string.IsNullOrEmpty(item.CoverImage)
                                         ? "https://via.placeholder.com/300x200"
                                         : item.CoverImage)"
                                  alt="@item.Name" />
                         </div>
 
-                        <div class="drink-body">
+                        <div class="master-card-body">
 
                             <h3>@item.Name</h3>
 

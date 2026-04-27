@@ -24,6 +24,7 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Reservations
+        // показва всички резервации (admin) или само на потребителя
         public async Task<IActionResult> Index()
         {
             var query = _context.Reservations
@@ -31,50 +32,30 @@ namespace ASPRestaurant.Controllers
                 .Include(r => r.Clients)
                 .AsQueryable();
 
-            // ако НЕ е админ → вижда само неговите
             if (!User.IsInRole("Admin"))
             {
                 var userId = _userManager.GetUserId(User);
                 query = query.Where(r => r.ClientId == userId);
             }
 
-            var reservations = await query.ToListAsync();
-            return View(reservations);
-        }
-
-        // GET: Details (само свои или admin)
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var userId = _userManager.GetUserId(User);
-
-            var reservation = await _context.Reservations
-                .Include(r => r.Tables)
-                .Include(r => r.Clients)
-                .FirstOrDefaultAsync(r =>
-                    r.Id == id &&
-                    (User.IsInRole("Admin") || r.ClientId == userId));
-
-            if (reservation == null)
-                return NotFound();
-
-            return View(reservation);
+            return View(await query.ToListAsync());
         }
 
         // GET: Create
+        // показва форма за нова резервация
         public IActionResult Create(int tableId)
         {
-            var reservation = new Reservation
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "TableNumber");
+
+            return View(new Reservation
             {
                 TableId = tableId,
                 Date = DateTime.Now
-            };
-
-            return View(reservation);
+            });
         }
 
         // POST: Create
+        // записва нова резервация
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reservation reservation)
@@ -82,17 +63,39 @@ namespace ASPRestaurant.Controllers
             reservation.RegisterOn = DateTime.Now;
             reservation.ClientId = _userManager.GetUserId(User);
 
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "TableNumber");
+
+            var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == reservation.TableId);
+
+            if (table == null)
+            {
+                ModelState.AddModelError("", "Няма такава маса");
+                return View(reservation);
+            }
+
+            if (reservation.NumberOfPeople > table.Count)
+            {
+                ModelState.AddModelError("", "Масата няма достатъчно места");
+                return View(reservation);
+            }
+
             if (!ModelState.IsValid)
                 return View(reservation);
 
             var start = reservation.Date.Date.Add(reservation.Time);
             var end = start.AddHours(2);
 
-            bool isTaken = await _context.Reservations.AnyAsync(r =>
-                r.TableId == reservation.TableId &&
-                start < r.Date.Date.Add(r.Time).AddHours(2) &&
-                end > r.Date.Date.Add(r.Time)
-            );
+            var reservations = await _context.Reservations
+     .Where(r => r.TableId == reservation.TableId)
+     .ToListAsync();
+
+            bool isTaken = reservations.Any(r =>
+            {
+                var rStart = r.Date.Date.Add(r.Time);
+                var rEnd = rStart.AddHours(2);
+
+                return start < rEnd && end > rStart;
+            });
 
             if (isTaken)
             {
@@ -106,7 +109,8 @@ namespace ASPRestaurant.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Edit (само свои или admin)
+        // GET: Edit
+        // показва форма за редакция
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -121,12 +125,13 @@ namespace ASPRestaurant.Controllers
             if (reservation == null)
                 return NotFound();
 
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "Description", reservation.TableId);
+            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "TableNumber", reservation.TableId);
 
             return View(reservation);
         }
 
         // POST: Edit
+        // обновява резервация
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Reservation reservation)
@@ -144,6 +149,15 @@ namespace ASPRestaurant.Controllers
             if (existing == null)
                 return NotFound();
 
+            var tableExists = await _context.Tables
+                .AnyAsync(t => t.Id == reservation.TableId);
+
+            if (!tableExists)
+            {
+                ModelState.AddModelError("", "Избраната маса не съществува");
+                return View(reservation);
+            }
+
             existing.NumberOfPeople = reservation.NumberOfPeople;
             existing.Date = reservation.Date;
             existing.Time = reservation.Time;
@@ -155,6 +169,7 @@ namespace ASPRestaurant.Controllers
         }
 
         // GET: Delete
+        // показва страница за изтриване
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -175,16 +190,15 @@ namespace ASPRestaurant.Controllers
         }
 
         // POST: Delete
+        // изтрива резервация
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userId = _userManager.GetUserId(User);
-
             var reservation = await _context.Reservations
                 .FirstOrDefaultAsync(r =>
                     r.Id == id &&
-                    (User.IsInRole("Admin") || r.ClientId == userId));
+                    (User.IsInRole("Admin") || r.ClientId == _userManager.GetUserId(User)));
 
             if (reservation != null)
             {
@@ -193,38 +207,6 @@ namespace ASPRestaurant.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReservationExists(int id)
-        {
-            return _context.Reservations.Any(e => e.Id == id);
-        }
-
-        // Table status (OK)
-        public async Task<IActionResult> UpdateTableStatuses()
-        {
-            var now = DateTime.Now;
-
-            var tables = await _context.Tables
-                .Include(t => t.Reservations)
-                .ToListAsync();
-
-            var model = tables.Select(t => new Table
-            {
-                Id = t.Id,
-                TableNumber = t.TableNumber,
-                Description = t.Description,
-                Count = t.Count,
-                IsAvailable = !t.Reservations.Any(r =>
-                {
-                    var start = r.Date.Add(r.Time);
-                    var end = start.AddHours(2);
-
-                    return now >= start && now <= end;
-                })
-            }).ToList();
-
-            return View(model);
         }
     }
 }
