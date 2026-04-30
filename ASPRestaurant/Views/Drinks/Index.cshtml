@@ -38,44 +38,39 @@
 
                         <div class="master-card-body">
 
-                            <h3>@item.Name</h3>
+                                <h3>@item.Name</h3>
 
-                            <p>@item.Description</p>
+                                <p class="menu-desc">@item.Description</p>
 
-                            <div class="drink-info">
-                                <span>@item.Litre L</span>
-                                <span class="price">@item.Price.ToString("F2") €</span>
+                                <div class="menu-info">
+
+                                    <p>📦 Литри: @item.Litre.ToString("0.000") L</p>
+
+                                    <p class="price">💰 Цена: @item.Price.ToString("0.00") €</p>
+                                </div>
+
+                                <div class="menu-actions mt-auto">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                        Детайли
+                                    </a>
+
+                            @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                            Редакция
+                                        </a>
+
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                            Изтрий
+                                        </a>
+                                    }
+                                </div>
+
                             </div>
-
-                            <div class="drink-actions">
-
-                                <a asp-action="Details"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-info btn-sm">
-                                    Детайли
-                                </a>
-
-                        @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-warning btn-sm">
-                                        Редактирай
-                                    </a>
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-danger btn-sm">
-                                        Изтрий
-                                    </a>
-                                }
 
                             </div>
 
                         </div>
-                    </div>
-
-                </div>
             }
 
         </div>

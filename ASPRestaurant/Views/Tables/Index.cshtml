@@ -1,137 +1,125 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Table>
 
 @{
-	ViewData["Title"] = "Маси";
+    ViewData["Title"] = "Маси";
 }
 
 <h1 class="section-title">Маси</h1>
 
 <!-- FILTERS -->
 <div class="filter-section mb-4">
-	<div class="row justify-content-center">
+    <div class="row justify-content-center">
 
-		<div class="col-md-4 mb-2">
-			<input type="text" class="form-control" placeholder="Търси по номер..." id="searchInput">
-		</div>
+        <div class="col-md-4 mb-2">
+            <input type="text" class="form-control" placeholder="Търси по номер..." id="searchInput">
+        </div>
 
-		<div class="col-md-4 mb-2">
-			<select class="form-control" id="statusFilter">
-				<option value="">Всички маси</option>
-				<option value="available">Свободни</option>
-				<option value="unavailable">Заети</option>
-			</select>
-		</div>
+        <div class="col-md-4 mb-2">
+            <select class="form-control" id="statusFilter">
+                <option value="">Всички маси</option>
+                <option value="available">Свободни</option>
+                <option value="unavailable">Заети</option>
+            </select>
+        </div>
 
-	</div>
+    </div>
 </div>
 
 @if (User.IsInRole("Admin"))
 {
-	<div class="text-center mb-4">
-		<a asp-action="Create" class="btn btn-primary">
-			Нова маса
-		</a>
-	</div>
+    <div class="text-center mb-4">
+        <a asp-action="Create" class="btn btn-primary">Нова маса</a>
+    </div>
 }
 
-<!-- GRID -->
 <div class="table-modern-grid">
 
-	<div class="table-modern-grid">
+    @foreach (var item in Model)
+    {
+        var now = DateTime.Now;
 
-		@foreach (var item in Model)
-		{
-			<div class="table-modern-card @(item.IsAvailable ? "free" : "busy")"
-				 data-number="@item.TableNumber"
-				 data-status="@(item.IsAvailable ? "available" : "unavailable")">
+        bool isAvailable = !item.Reservations.Any(r =>
+        {
+            var start = r.Date.Date + r.Time;
+            var end = start.AddHours(2).AddMinutes(10);
 
-				<img src="@GetTableImage(item.TableNumber)" />
+            return now >= start && now <= end;
+        });
 
-				<div class="overlay">
+        <div class="table-modern-card @(isAvailable ? "free" : "busy")"
+             data-number="@item.TableNumber"
+             data-status="@(isAvailable ? "available" : "unavailable")">
 
-					<h3>Маса @item.TableNumber</h3>
-					<p>@item.Description</p>
+            <img src="@GetTableImage(item.Description ?? "")" />
 
-					<div class="table-capacity">
-						👥 @item.Count места
-					</div>
+            <div class="overlay">
 
-					<span class="status-chip @(item.IsAvailable ? "green" : "red")">
-						@(item.IsAvailable ? "Свободна" : "Заета")
-					</span>
+                <h3>Маса @item.TableNumber</h3>
 
-					@if (User.Identity.IsAuthenticated && item.IsAvailable)
-					{
-						<a asp-controller="Reservations"
-						   asp-action="Create"
-						   asp-route-tableId="@item.Id"
-						   class="btn btn-success w-100 mt-2">
-							Резервирай
-						</a>
-					}
+                <p>
+                    @if (!string.IsNullOrEmpty(item.Description))
+                    {
+                        @item.Description
+                    }
+                    else
+                    {
+                        <span>Без зона</span>
+                    }
+                </p>
 
-				</div>
+                <div class="table-capacity">
+                    👥 @item.Count места
+                </div>
 
-			</div>
-		}
+                <span class="status-chip @(isAvailable ? "green" : "red")">
+                    @(isAvailable ? "Свободна" : "Заета")
+                </span>
 
-	</div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Reservations"
+                       asp-action="Create"
+                       asp-route-tableId="@item.Id"
+                       class="btn btn-success w-100 mt-2">
+                        Резервирай
+                    </a>
+                }
+                else
+                {
+                    <a asp-area="Identity"
+                       asp-page="/Account/Login"
+                       asp-route-returnUrl="@Url.Action("Create", "Reservations", new { tableId = item.Id })"
+                       class="btn btn-warning w-100 mt-2">
+                        Вход за резервация
+                    </a>
+                }
+
+            </div>
+        </div>
+    }
 
 </div>
 
 @functions {
-	public string GetTableImage(int tableNumber)
-	{
-		if (tableNumber % 3 == 0)
-		{
-			return "https://kalamakirestaurant.com/wp-content/uploads/2023/08/opengra.jpg"; // море
-		}
-		else if (tableNumber % 3 == 1)
-		{
-			return "https://theglossarymagazine.com/wp-content/uploads/2020/07/The-Berkeley-Terrace-JustinDeSouza-98-e1598568995367.jpg"; // градина
-		}
-		else if (tableNumber % 3 == 2)
-		{
-			return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg"; // тераса
-		}
-		else
-		{
-			return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg"; // плаж
-		}
-	}
-}
-@section Scripts {
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
+    public string GetTableImage(string zone)
+    {
+        if (string.IsNullOrEmpty(zone))
+            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
 
-				const searchInput = document.getElementById("searchInput");
-				const statusFilter = document.getElementById("statusFilter");
-				const cards = document.querySelectorAll(".table-card-modern");
+        zone = zone.ToLower();
 
-				function filterTables() {
+        if (zone.Contains("море"))
+            return "https://kalamakirestaurant.com/wp-content/uploads/2023/08/opengra.jpg";
 
-					const searchValue = searchInput.value.toLowerCase();
-					const statusValue = statusFilter.value;
+        if (zone.Contains("плаж"))
+            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
 
-					cards.forEach(card => {
+        if (zone.Contains("градина"))
+            return "https://theglossarymagazine.com/wp-content/uploads/2020/07/The-Berkeley-Terrace-JustinDeSouza-98-e1598568995367.jpg";
 
-						const number = card.getAttribute("data-number");
-						const status = card.getAttribute("data-status");
+        if (zone.Contains("тераса"))
+            return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
 
-						let matchSearch = number.includes(searchValue);
-						let matchStatus = statusValue === "" || status === statusValue;
-
-						if (matchSearch && matchStatus) {
-							card.style.display = "block";
-						} else {
-							card.style.display = "none";
-						}
-					});
-				}
-
-				searchInput.addEventListener("input", filterTables);
-				statusFilter.addEventListener("change", filterTables);
-
-			});
-		</script>
+        return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
+    }
 }

@@ -5,6 +5,7 @@
 }
 
 <div class="grid-container">
+
     <h1 class="section-title">Резервации</h1>
 
     @if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -19,6 +20,7 @@
     <!-- FILTERS -->
     <div class="filter-section mb-4">
         <div class="row">
+
             <div class="col-md-3">
                 <input type="date" class="form-control" id="dateFilter">
             </div>
@@ -39,11 +41,14 @@
             <div class="col-md-3">
                 <input type="text" class="form-control" id="searchInput" placeholder="Клиент...">
             </div>
+
         </div>
     </div>
 
+    <!-- TABLE -->
     <div class="table-container">
         <table class="table">
+
             <thead>
                 <tr>
                     <th>Дата</th>
@@ -63,9 +68,9 @@
                     var end = start.AddHours(2);
 
                     var status =
-                        DateTime.Now >= start && DateTime.Now <= end ? "active" :
-                        reservation.Date > DateTime.Now ? "pending" :
-                        "completed";
+                    DateTime.Now < start ? "pending" :
+                    DateTime.Now > end ? "completed" :
+                    "active";
 
                     <tr data-date="@reservation.Date.ToString("yyyy-MM-dd")"
                         data-time="@reservation.Time.ToString(@"hh\:mm")"
@@ -76,12 +81,7 @@
                         <td>@reservation.Time.ToString(@"hh\:mm")</td>
                         <td>@reservation.Clients?.UserName</td>
                         <td>@reservation.NumberOfPeople</td>
-
-                        <td>
-                            @(reservation.Tables != null
-                                ? $"Маса {reservation.Tables.TableNumber}"
-                                : "Без маса")
-                        </td>
+                        <td>Маса @reservation.Tables?.TableNumber</td>
 
                         <td>
                             @if (status == "active")
@@ -114,50 +114,54 @@
                                 </a>
                             }
                         </td>
+
                     </tr>
                 }
             </tbody>
+
         </table>
     </div>
 </div>
 
+<!-- FILTER SCRIPT -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
 
-    const dateFilter = document.getElementById("dateFilter");
-    const timeFilter = document.getElementById("timeFilter");
-    const searchInput = document.getElementById("searchInput");
-    const statusFilter = document.getElementById("statusFilter");
+        const dateFilter = document.getElementById("dateFilter");
+        const timeFilter = document.getElementById("timeFilter");
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
 
-    const rows = document.querySelectorAll("tbody tr");
+        const rows = document.querySelectorAll("tbody tr");
 
-    function filter() {
-        const date = dateFilter.value;
-        const time = timeFilter.value;
-        const search = searchInput.value.toLowerCase();
-        const status = statusFilter.value;
+        function filter() {
 
-        rows.forEach(row => {
+            const date = dateFilter.value;
+            const time = timeFilter.value;
+            const search = searchInput.value.toLowerCase();
+            const status = statusFilter.value;
 
-            const rDate = row.dataset.date;
-            const rTime = row.dataset.time;
-            const rClient = row.dataset.client?.toLowerCase() || "";
-            const rStatus = row.dataset.status;
+            rows.forEach(row => {
 
-            let show = true;
+                const rDate = row.dataset.date;
+                const rTime = row.dataset.time;
+                const rClient = row.dataset.client?.toLowerCase() || "";
+                const rStatus = row.dataset.status;
 
-            if (date && rDate !== date) show = false;
-            if (time && !rTime.startsWith(time)) show = false;
-            if (search && !rClient.includes(search)) show = false;
-            if (status && rStatus !== status) show = false;
+                let show = true;
 
-            row.style.display = show ? "" : "none";
-        });
-    }
+                if (date && rDate !== date) show = false;
+                if (time && !rTime.startsWith(time)) show = false;
+                if (search && !rClient.includes(search)) show = false;
+                if (status && rStatus !== status) show = false;
 
-    dateFilter.addEventListener("input", filter);
-    timeFilter.addEventListener("input", filter);
-    searchInput.addEventListener("input", filter);
-    statusFilter.addEventListener("change", filter);
-});
+                row.style.display = show ? "" : "none";
+            });
+        }
+
+        dateFilter.addEventListener("input", filter);
+        timeFilter.addEventListener("input", filter);
+        searchInput.addEventListener("input", filter);
+        statusFilter.addEventListener("change", filter);
+    });
 </script>

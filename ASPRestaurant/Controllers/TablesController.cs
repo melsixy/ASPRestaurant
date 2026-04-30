@@ -157,31 +157,11 @@ namespace ASPRestaurant.Controllers
         }
         public async Task<IActionResult> UpdateTableStatuses()
         {
-            var now = DateTime.Now;
-
             var tables = await _context.Tables
                 .Include(t => t.Reservations)
                 .ToListAsync();
 
-            var model = tables.Select(t => new Table
-            {
-                Id = t.Id,
-                TableNumber = t.TableNumber,
-                Description = t.Description,
-                Count = t.Count,
-
-                IsAvailable = !t.Reservations.Any(r =>
-                {
-                    var reservationStart = r.Date.Date + r.Time;
-
-                    var start = reservationStart.AddMinutes(-30);
-                    var end = reservationStart.AddHours(2).AddMinutes(10);
-
-                    return now >= start && now <= end;
-                })
-            }).ToList();
-
-            return View(model);
+            return View(tables);
         }
     }
 }

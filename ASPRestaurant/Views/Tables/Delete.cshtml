@@ -41,13 +41,16 @@
                 
                 <dt>Статус</dt>
                 <dd>
-                    @if (Model.IsAvailable)
-                    {
-                        <span class="status-badge status-available">Свободна</span>
-                    }
-                    else
-                    {
-                        <span class="status-badge status-busy">Заета</span>
+                    @{
+                        var now = DateTime.Now;
+
+                        bool isAvailable = !Model.Reservations.Any(r =>
+                        {
+                            var start = r.Date.Date + r.Time;
+                            var end = start.AddHours(2).AddMinutes(10);
+
+                            return now >= start && now <= end;
+                        });
                     }
                 </dd>
                 

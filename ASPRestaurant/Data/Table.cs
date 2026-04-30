@@ -7,6 +7,5 @@
         public int TableNumber { get; set; }
         public int Count { get; set; }
         public ICollection<Reservation> Reservations { get; set; }   
-        public bool IsAvailable { get; set; }
     }
 }

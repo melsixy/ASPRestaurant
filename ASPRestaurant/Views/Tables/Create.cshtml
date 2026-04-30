@@ -4,92 +4,83 @@
     ViewData["Title"] = "Нова маса";
 }
 
-<div class="create-page">
-    <div class="create-card">
-        <h1>Добави нова маса</h1>
-        
+<div class="reservation-modern">
+
+    <div class="reservation-card">
+
+        <h1>Добави маса</h1>
+
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="TableNumber" class="form-label">Номер на маса</label>
-                        <input asp-for="TableNumber" class="form-control" type="number" min="1" placeholder="Въведете номер на масата" />
-                        <span asp-validation-for="TableNumber" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Count" class="form-label">Капацитет</label>
-                        <input asp-for="Count" class="form-control" type="number" min="1" max="20" placeholder="Брой места" />
-                        <span asp-validation-for="Count" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- NUMBER -->
             <div class="form-group">
-                <label asp-for="Description" class="form-label">Описание</label>
-                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Опишете локацията на масата..."></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="TableNumber">Номер на маса</label>
+                <input asp-for="TableNumber" class="form-control" />
             </div>
 
-            <div class="form-group">
-                <div class="form-check">
-                    <input asp-for="IsAvailable" class="form-check-input" />
-                    <label asp-for="IsAvailable" class="form-check-label">Масата е налична</label>
+            <!-- CAPACITY -->
+            <div class="form-group mt-2">
+                <label asp-for="Count">Капацитет</label>
+                <input asp-for="Count" class="form-control" />
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group mt-2">
+                <label asp-for="Description">Описание</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+
+            <!-- hidden field for zone -->
+            <input type="hidden" id="Zone" name="Zone" />
+
+            <h3 class="mt-4">Избери местоположение</h3>
+
+            <div class="table-modern-grid">
+
+                <div class="table-modern" onclick="selectZone('sea', this)">
+                    <img src="/images/seaview.png" />
+                    <div class="overlay">🌊 Гледка към море</div>
                 </div>
-            </div>
 
-            <!-- Визуализация на масата -->
-            <div class="table-preview">
-                <h3>Преглед на масата</h3>
-                <div class="table-layout">
-                    <div class="table-shape">
-                        <div class="table-number-preview">Маса <span id="previewNumber">?</span></div>
-                        <div class="table-seats" id="previewSeats">
-                            <!-- Местата ще се генерират динамично -->
-                        </div>
-                    </div>
+                <div class="table-modern" onclick="selectZone('beach', this)">
+                    <img src="/images/beachview.png" />
+                    <div class="overlay">🏖 Плаж</div>
                 </div>
+
+                <div class="table-modern" onclick="selectZone('garden', this)">
+                    <img src="/images/gardenview.jpg" />
+                    <div class="overlay">🌿 Градина</div>
+                </div>
+
+                <div class="table-modern" onclick="selectZone('terrace', this)">
+                    <img src="/images/interior.jpg" />
+                    <div class="overlay">🌇 Тераса</div>
+                </div>
+
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Запази
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </a>
-            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">
+                Запази маса
+            </button>
+
         </form>
+
     </div>
+
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    
-    <script>
-        // Динамичен преглед на масата
-        document.getElementById('TableNumber').addEventListener('input', updateTablePreview);
-        document.getElementById('Count').addEventListener('input', updateTablePreview);
+<script>
+function selectZone(zone, el) {
 
-        function updateTablePreview() {
-            const tableNumber = document.getElementById('TableNumber').value || '?';
-            const seatCount = parseInt(document.getElementById('Count').value) || 0;
-            
-            document.getElementById('previewNumber').textContent = tableNumber;
-            
-            const seatsContainer = document.getElementById('previewSeats');
-            seatsContainer.innerHTML = '';
-            
-            // Генериране на места около масата
-            for (let i = 0; i < seatCount; i++) {
-                const seat = document.createElement('div');
-                seat.className = 'seat';
-                seat.textContent = i + 1;
-                seatsContainer.appendChild(seat);
-            }
-        }
-    </script>
+    document.getElementById("Zone").value = zone;
+
+    document.querySelectorAll(".table-modern")
+        .forEach(x => x.classList.remove("selected"));
+
+    el.classList.add("selected");
+}
+</script>
 }

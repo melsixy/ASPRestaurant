@@ -63,9 +63,12 @@ namespace ASPRestaurant.Controllers
             reservation.RegisterOn = DateTime.Now;
             reservation.ClientId = _userManager.GetUserId(User);
 
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "TableNumber");
+            if (!ModelState.IsValid)
+                return View(reservation);
 
-            var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == reservation.TableId);
+            var table = await _context.Tables
+                .Include(t => t.Reservations)
+                .FirstOrDefaultAsync(t => t.Id == reservation.TableId);
 
             if (table == null)
             {
@@ -79,17 +82,10 @@ namespace ASPRestaurant.Controllers
                 return View(reservation);
             }
 
-            if (!ModelState.IsValid)
-                return View(reservation);
-
             var start = reservation.Date.Date.Add(reservation.Time);
             var end = start.AddHours(2);
 
-            var reservations = await _context.Reservations
-     .Where(r => r.TableId == reservation.TableId)
-     .ToListAsync();
-
-            bool isTaken = reservations.Any(r =>
+            bool isTaken = table.Reservations.Any(r =>
             {
                 var rStart = r.Date.Date.Add(r.Time);
                 var rEnd = rStart.AddHours(2);
@@ -99,7 +95,7 @@ namespace ASPRestaurant.Controllers
 
             if (isTaken)
             {
-                ModelState.AddModelError("", "Масата е заета");
+                ModelState.AddModelError("", "Масата е заета за този час");
                 return View(reservation);
             }
 

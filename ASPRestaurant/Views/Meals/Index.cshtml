@@ -1,87 +1,90 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Meal>
 
 @{
-    ViewData["Title"] = "Ястия";
-    var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
+	ViewData["Title"] = "Ястия";
+	var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
 }
 
 <div class="container py-4">
 
-    <h1 class="section-title text-center mb-4">Нашите ястия</h1>
+	<h1 class="section-title text-center mb-4">Нашите ястия</h1>
 
-    @if (User.IsInRole("Admin"))
-    {
-        <div class="text-center mb-4">
-            <a asp-action="Create" class="btn btn-primary">
-                Добави ястие
-            </a>
-        </div>
-    }
+	@if (User.IsInRole("Admin"))
+	{
+		<div class="text-center mb-4">
+			<a asp-action="Create" class="btn btn-primary">
+				Добави ястие
+			</a>
+		</div>
+	}
 
-    @foreach (var group in grouped)
-    {
-        <h2 class="category-title text-center mt-5 mb-3">
-            @group.Key
-        </h2>
+	@foreach (var group in grouped)
+	{
+		<h2 class="category-title text-center mt-5 mb-3">
+			@group.Key
+		</h2>
 
-        <div class="row justify-content-center">
+		<div class="row justify-content-center">
 
-            @foreach (var item in group)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+			@foreach (var item in group)
+			{
+				<div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
 
-                    <div class="master-card">
+					<div class="master-card">
 
-                        <div>
-                            <img src="@(string.IsNullOrEmpty(item.CoverImage)
-                                        ? "https://via.placeholder.com/300x200"
-                                        : item.CoverImage)"
-                                 alt="@item.Name" />
-                        </div>
+						<div>
+							<img src="@(string.IsNullOrEmpty(item.CoverImage)
+														  ? "https://via.placeholder.com/300x200"
+														  : item.CoverImage)"
+						 alt="@item.Name" />
+				</div>
 
-                        <div class="master-card-body">
+						<div class="master-card-body">
 
-                            <h3>@item.Name</h3>
+							<h3>@item.Name</h3>
 
-                            <p>@item.Alergens</p>
+							<p class="menu-desc">
+								@(string.IsNullOrWhiteSpace(item.Alergens) ? "Алергени: няма" : $"🥛 Алергени: {item.Alergens}")
+							</p>
 
-                            <div class="drink-info">
-                                <span>@item.TypeOrders?.Name</span>
-                                <span class="price">@item.Price.ToString("F2") €</span>
-                            </div>
+							<div class="menu-info">
+								<span>🍽 Категория: @item.TypeOrders?.Name</span>
+								<p class="price">💰 Цена: @item.Price.ToString("0.00") €</p>
+							</div>
 
-                            <div class="drink-actions">
+							<div class="drink-actions mt-auto">
 
-                                <a asp-action="Details"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-info btn-sm">
-                                    Детайли
-                                </a>
+								<a asp-action="Details"
+								   asp-route-id="@item.Id"
+								   class="btn btn-info btn-sm">
+									Детайли
+								</a>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-warning btn-sm">
-                                        Редактирай
-                                    </a>
+						@if (User.IsInRole("Admin"))
+								{
+									<a asp-action="Edit"
+									   asp-route-id="@item.Id"
+									   class="btn btn-warning btn-sm">
+										Редакция
+									</a>
 
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-danger btn-sm">
-                                        Изтрий
-                                    </a>
-                                }
+									<a asp-action="Delete"
+									   asp-route-id="@item.Id"
+									   class="btn btn-danger btn-sm">
+										Изтрий
+									</a>
+								}
 
-                            </div>
+							</div>
 
-                        </div>
-                    </div>
+						</div>
 
-                </div>
-            }
+					</div>
 
-        </div>
-    }
+				</div>
+			}
+
+		</div>
+	}
 
 </div>

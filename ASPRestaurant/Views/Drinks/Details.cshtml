@@ -9,35 +9,40 @@
     <div class="details-card">
 
         <div class="details-image">
-            <img src="@(Model.CoverImage ?? "https://via.placeholder.com/600x400")" />
+            <img src="@(Model.CoverImage ?? "https://via.placeholder.com/600x400")"
+                 alt="@Model.Name" />
         </div>
 
         <div class="details-body">
 
-            <h1>@Model.Name</h1>
+            <h1 class="details-title">@Model.Name</h1>
 
             <p class="details-desc">
-                @Model.Description
+                @(string.IsNullOrWhiteSpace(Model.Description)
+                                ? "Няма описание"
+                                : Model.Description)
             </p>
 
             <div class="details-info">
 
                 <div class="info-box">
-                    🥤 Литри: @Model.Litre L
+                    🥤 Литри: <strong>@Model.Litre.ToString("0.000") L</strong>
                 </div>
 
                 <div class="info-box">
-                    📦 Категория: @Model.TypeOrders?.Name
+                    📦 Категория: <strong>@Model.TypeOrders?.Name</strong>
                 </div>
 
                 <div class="info-box">
-                    💰 Цена: @Model.Price.ToString("F2") €
+                    💰 Цена: <strong>@Model.Price.ToString("0.00") €</strong>
                 </div>
 
             </div>
 
             <div class="details-actions">
-                <a href="javascript:history.back()" class="btn-back">← Назад</a>
+                <a href="javascript:history.back()" class="btn-back">
+                    ← Назад
+                </a>
             </div>
 
         </div>

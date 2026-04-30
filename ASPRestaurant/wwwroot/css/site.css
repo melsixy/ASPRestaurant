@@ -271,7 +271,23 @@ html {
 }
 
 .details-body {
-    padding: 30px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.details-title {
+    margin-bottom: 10px;
+}
+
+.details-desc {
+    color: #666;
+    margin-bottom: 20px;
+    max-width: 90%;
+    text-align: center;
+    line-height: 1.5;
 }
 
 .details-info {
@@ -287,7 +303,6 @@ html {
     border-radius: 15px;
     font-weight: 600;
 }
-
 /* ================= FOOTER ================= */
 footer {
     width: 100%;

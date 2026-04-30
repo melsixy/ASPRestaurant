@@ -92,33 +92,45 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,Litre,Price,CoverImage,TypeOrderId")] Drink drink)
+        public async Task<IActionResult> Edit(int id, Drink drink, IFormFile coverImageFile)
         {
             if (id != drink.Id)
-            {
                 return NotFound();
-            }
+
+            var existing = await _context.Drinks.FindAsync(id);
+
+            if (existing == null)
+                return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                // обновяване на полета
+                existing.Name = drink.Name;
+                existing.Description = drink.Description;
+                existing.Litre = drink.Litre;
+                existing.Price = drink.Price;
+                existing.TypeOrderId = drink.TypeOrderId;
+
+                // 🔥 СНИМКА
+                if (coverImageFile != null && coverImageFile.Length > 0)
                 {
-                    _context.Update(drink);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DrinkExists(drink.Id))
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
+                    var path = Path.Combine("wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        return NotFound();
+                        await coverImageFile.CopyToAsync(stream);
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    existing.CoverImage = "/images/" + fileName;
                 }
+                // ❗ ако няма нова снимка → старата остава
+
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
             return View(drink);
         }
