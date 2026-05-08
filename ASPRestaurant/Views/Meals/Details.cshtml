@@ -24,17 +24,29 @@
                 </div>
 
                 <div class="info-box">
-                    ⚠️ Алергени: <strong>@(string.IsNullOrWhiteSpace(Model.Alergens) ? "няма" : Model.Alergens)</strong>
+                    ⚠️ Алергени:
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Alergens)
+                                                ? "няма"
+                                                : Model.Alergens)
+                    </strong>
+                </div>
+
+                <div class="info-box">
+                    ⚖️ Грамаж: <strong>@Model.Grammage g</strong>
                 </div>
 
                 <div class="info-box">
                     💰 Цена: <strong>@Model.Price.ToString("0.00") €</strong>
                 </div>
+
                 <div class="details-actions">
                     <a href="javascript:history.back()" class="btn-back">
                         ← Назад
                     </a>
                 </div>
+
+            </div>
             </div>
 
         </div>

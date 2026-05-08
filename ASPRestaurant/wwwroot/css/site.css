@@ -139,7 +139,7 @@ html {
 /* ================= HERO ================= */
 .hero-section {
     height: 90vh;
-    background: url("https://th.bing.com/th/id/R.68b85ecadf7a4e0393109483f2019517?rik=akGigz2B6sLlTQ&pid=ImgRaw&r=0") center/cover no-repeat;
+    background: url("https://th.bing.com/th/id/R.68b85ecadf7a4e0393109483f2019517?rik=akGigz2B6sLlTQ&pid=ImgRaw&r=0Ô") center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -445,4 +445,96 @@ footer {
     .table-modern-grid {
         grid-template-columns: 1fr;
     }
+}
+/* ================= CATEGORY PAGES ================= */
+
+.category-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+.category-card {
+    transition: 0.3s;
+}
+
+    .category-card:hover {
+        transform: translateY(-8px);
+    }
+/* FORM CARD */
+.category-form-card,
+.details-modern-card,
+.delete-modern-card {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 25px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+}
+
+    /* TITLES */
+    .category-form-card h1,
+    .details-modern-card h1,
+    .delete-modern-card h1 {
+        color: #1e3c72;
+        margin-bottom: 10px;
+    }
+
+/* SUBTITLE */
+.subtitle {
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+/* INPUT */
+.category-form-card .form-control {
+    border-radius: 15px;
+    padding: 12px;
+    border: 1px solid #dbe4f0;
+}
+
+/* BUTTONS */
+.category-form-card .btn,
+.details-modern-card .btn,
+.delete-modern-card .btn {
+    border-radius: 20px;
+    padding: 10px;
+    font-weight: 600;
+}
+
+/* DETAILS */
+.details-date {
+    font-size: 16px;
+    color: #555;
+    margin: 20px 0;
+}
+
+/* BUTTON GROUP */
+.details-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* DELETE */
+.delete-modern-card h3 {
+    color: #dc3545;
+    margin-bottom: 25px;
+}
+.category-card {
+    border-radius: 16px;
+    transition: all 0.25s ease-in-out;
+}
+
+    .category-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+.card-title {
+    font-size: 1.25rem;
 }

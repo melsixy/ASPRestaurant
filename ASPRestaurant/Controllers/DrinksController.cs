@@ -58,14 +58,36 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Litre,Price,CoverImage,TypeOrderId")] Drink drink)
+        public async Task<IActionResult> Create(Drink drink, IFormFile coverImageFile)
         {
             if (ModelState.IsValid)
             {
+                if (coverImageFile != null && coverImageFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
+                    var path = Path.Combine("wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await coverImageFile.CopyToAsync(stream);
+                    }
+
+                    drink.CoverImage = "/images/" + fileName;
+                }
+                else
+                {
+                    drink.CoverImage = "/images/default.jpg";
+                }
+
+                if (string.IsNullOrWhiteSpace(drink.Description))
+                {
+                    drink.Description = "няма";
+                }
                 _context.Add(drink);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
             return View(drink);
         }

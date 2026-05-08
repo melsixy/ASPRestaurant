@@ -21,8 +21,9 @@ namespace ASPRestaurant.Controllers
         // GET: Meals
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Meals.Include(m => m.TypeOrders);
-            return View(await applicationDbContext.ToListAsync());
+            var meals = _context.Meals.Include(m => m.TypeOrders);
+            return View(await meals.ToListAsync());
+
         }
 
         // GET: Meals/Details/5
@@ -56,15 +57,36 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Alergens,Grammage,Price,CoverImage,TypeOrderId")] Meal meal)
+        public async Task<IActionResult> Create(Meal meal, IFormFile coverImageFile)
         {
-         
             if (ModelState.IsValid)
             {
+                if (coverImageFile != null && coverImageFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
+                    var path = Path.Combine("wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await coverImageFile.CopyToAsync(stream);
+                    }
+
+                    meal.CoverImage = "/images/" + fileName;
+                }
+                else
+                {   
+                    meal.CoverImage = "/images/default.jpg";
+                }
+
+                if (string.IsNullOrWhiteSpace(meal.Alergens))
+                {
+                    meal.Alergens = "няма";
+                }
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", meal.TypeOrderId);
             return View(meal);
         }
@@ -82,7 +104,7 @@ namespace ASPRestaurant.Controllers
             {
                 return NotFound();
             }
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Id", meal.TypeOrderId);
+            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", meal.TypeOrderId);
             return View(meal);
         }
 
@@ -130,7 +152,7 @@ namespace ASPRestaurant.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Id", meal.TypeOrderId);
+            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", meal.TypeOrderId);
             return View(meal);
         }
 

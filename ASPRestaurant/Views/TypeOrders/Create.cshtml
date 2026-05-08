@@ -1,21 +1,38 @@
 ﻿@model ASPRestaurant.Data.TypeOrder
 
-<div class="create-page">
-    <div class="create-card">
+@{
+    ViewData["Title"] = "Добави категория";
+}
 
-        <h1>Категория</h1>
-        <h4>Добавяне на нова категория</h4>
+<div class="category-page">
+
+    <div class="category-form-card">
+
+        <h1>Добави категория</h1>
+        <p class="subtitle">Създаване на нова категория</p>
 
         <form asp-action="Create">
 
-            <input asp-for="Name" class="form-control" placeholder="Име на категория" />
+            <div class="form-group mb-3">
+                <label class="form-label">Име на категория</label>
 
-            <button type="submit" class="btn btn-primary mt-2">Запази</button>
+                <input asp-for="Name"
+                       class="form-control"
+                       placeholder="Например: Напитки" />
+
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Запази
+            </button>
 
         </form>
 
-        <a asp-action="Index" class="back-link">⬅ Назад</a>
+        <a asp-action="Index" class="btn btn-secondary w-100 mt-3">
+            Назад
+        </a>
 
     </div>
+
 </div>
-}
