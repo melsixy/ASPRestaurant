@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <label asp-for="CoverImage" class="form-label">Снимка</label>
-                <input asp-for="CoverImage" class="form-control" type="file" accept="image/*" />
+                <input name="coverImageFile" class="form-control" type="file" accept="image/*" />
                 <span asp-validation-for="CoverImage" class="text-danger"></span>
                 <small class="text-muted">Поддържани формати: JPG, PNG, GIF (макс. 5MB)</small>
             </div>
@@ -71,7 +71,7 @@
     
     <script>
         // Преглед на изображение преди качване
-        document.getElementById('CoverImage').addEventListener('change', function(e) {
+         document.querySelector('input[name="coverImageFile"]').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();

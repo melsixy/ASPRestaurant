@@ -1,7 +1,7 @@
 ﻿@model ASPRestaurant.Data.Drink
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = "Детайили";
 }
 
 <div class="details-wrapper">
@@ -26,12 +26,13 @@
             <div class="details-info">
 
                 <div class="info-box">
-                    🥤 Литри: <strong>@Model.Litre.ToString("0.000") L</strong>
+                    🍽 Категория: <strong>@Model.TypeOrders?.Name</strong>
                 </div>
 
                 <div class="info-box">
-                    📦 Категория: <strong>@Model.TypeOrders?.Name</strong>
+                    🥤 Литри: <strong>@Model.Litre.ToString("0") ml</strong>
                 </div>
+
 
                 <div class="info-box">
                     💰 Цена: <strong>@Model.Price.ToString("0.00") €</strong>
@@ -40,6 +41,7 @@
             </div>
 
             <div class="details-actions">
+
                 <a href="javascript:history.back()" class="btn-back">
                     ← Назад
                 </a>

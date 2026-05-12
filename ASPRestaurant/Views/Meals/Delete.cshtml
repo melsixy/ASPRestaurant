@@ -1,7 +1,7 @@
 ﻿@model ASPRestaurant.Data.Meal
 
 @{
-    ViewData["Title"] = "Изтрий ястие";
+    ViewData["Title"] = "Изтриване";
 }
 
 <div class="delete-page">
@@ -14,9 +14,9 @@
             <b>@Model.Name</b> ?
         </p>
 
+        <div class="delete-details">
+            <h3>@Model.Name</h3>
         <hr />
-
-        <p><b>Описание:</b> @Model.Alergens</p>
 
         <p><b>Цена:</b> @Model.Price.ToString("F2") €</p>
 
@@ -37,11 +37,6 @@
             <button type="submit" class="btn btn-danger">
                 Изтрий
             </button>
-
-            <a asp-action="Details" asp-route-id="@Model.Id"
-               class="btn btn-secondary">
-                Отмени
-            </a>
 
             <a asp-action="Index" class="btn btn-dark">
                 Назад

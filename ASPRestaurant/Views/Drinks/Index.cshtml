@@ -1,79 +1,144 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Drink>
+
+@{
+	var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
+}
+
 <div class="container py-4">
 
-    <h1 class="section-title text-center mb-4">Меню напитки</h1>
+	<h1 class="section-title text-center mb-4">Меню напитки</h1>
 
-    @if (User.IsInRole("Admin"))
-    {
-        <div class="text-center mb-4">
-            <a asp-action="Create" class="btn btn-primary">
-                Добави напитка
-            </a>
-        </div>
-    }
+	@if (User.IsInRole("Admin"))
+	{
+		<div class="text-center mb-4">
+			<a asp-action="Create" class="btn btn-primary">Добави напитка</a>
+		</div>
+	}
 
-    @{
-        var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
-    }
+	<div class="row justify-content-center mb-4">
 
-    @foreach (var group in grouped)
-    {
-        <h2 class="category-title text-center mt-5 mb-3">
-            @group.Key
-        </h2>
+		<div class="col-md-4">
+			<input id="drinkSearch" class="form-control" placeholder="Търси напитка..." />
+		</div>
 
-        <div class="row justify-content-center">
+		<div class="col-md-4">
+			<select id="drinkCategory" class="form-control">
 
-            @foreach (var item in group)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
-                    <div class="master-card">
+				<option value="">Всички категории</option>
 
-                        <div>
-                            <img src="@(string.IsNullOrEmpty(item.CoverImage)
-                                                                         ? "https://via.placeholder.com/300x200"
-                                                                         : item.CoverImage)"
-                         alt="@item.Name" />
-                </div>
+				@foreach (var g in grouped.Select(x => x.Key))
+				{
+					<option value="@g">@g</option>
+				}
 
-                        <div class="master-card-body">
+			</select>
+		</div>
 
-                                <h3>@item.Name</h3>
+	</div>
 
-                                <p class="menu-desc">@item.Description</p>
+	@foreach (var group in grouped)
+	{
+		<h2 class="category-title text-center mt-4 mb-3">@group.Key</h2>
 
-                                <div class="menu-info">
+		<div class="row justify-content-center">
 
-                                <p>📦 Количество: @item.Litre.ToString("0") ml</p>
+			@foreach (var item in group)
+			{
+				<div class="col-lg-3 col-md-4 col-sm-6 mb-4 drink-item">
 
-                                    <p class="price">💰 Цена: @item.Price.ToString("0.00") €</p>
-                                </div>
+					<div class="master-card"
+						 data-name="@item.Name"
+						 data-category="@item.TypeOrders?.Name">
 
-                                <div class="menu-actions mt-auto">
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                                        Детайли
-                                    </a>
+						<img src="@(string.IsNullOrEmpty(item.CoverImage)
+											 ? "https://via.placeholder.com/300x200"
+											 : item.CoverImage)" />
 
-                            @if (User.IsInRole("Admin"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
-                                            Редакция
-                                        </a>
+				<div class="master-card-body">
 
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                                            Изтрий
-                                        </a>
-                                    }
-                                </div>
+							<h3>@item.Name</h3>
 
-                            </div>
+							<p>
+								📝 Описание: @item.Description
+							</p> 
 
-                            </div>
+							<p>
+								🥤 Количество: @item.Litre ml
+							</p>
 
-                        </div>
-            }
+							<p>
+								💰 Цена: @item.Price.ToString("0.00") €
+							</p>
 
-        </div>
-    }
+
+						</div>
+						<div class="drink-actions">
+
+							<a asp-action="Details"
+							   asp-route-id="@item.Id"
+							   class="btn btn-info btn-sm">
+								Детайли
+							</a>
+
+					@if (User.IsInRole("Admin"))
+							{
+								<a asp-action="Edit"
+								   asp-route-id="@item.Id"
+								   class="btn btn-warning btn-sm">
+									Редакция
+								</a>
+
+								<a asp-action="Delete"
+								   asp-route-id="@item.Id"
+								   class="btn btn-danger btn-sm">
+									Изтрий
+								</a>
+							}
+
+						</div>
+
+					</div>
+
+				</div>
+				}
+
+
+		</div>
+	}
 
 </div>
+
+<script>
+
+	var search = document.getElementById("drinkSearch");
+	var category = document.getElementById("drinkCategory");
+	var items = document.getElementsByClassName("drink-item");
+
+	function filter() {
+
+		var text = search.value.toLowerCase();
+		var cat = category.value.toLowerCase();
+
+		for (var i = 0; i < items.length; i++) {
+
+			var card = items[i].querySelector(".master-card");
+
+			var name = card.getAttribute("data-name").toLowerCase();
+			var categoryValue = card.getAttribute("data-category").toLowerCase();
+
+			var matchSearch = name.startsWith(text);
+
+			var matchCategory = (cat == "" || categoryValue == cat);
+
+			if (matchSearch && matchCategory) {
+				items[i].style.display = "";
+			} else {
+				items[i].style.display = "none";
+			}
+		}
+	}
+
+	search.addEventListener("input", filter);
+	category.addEventListener("change", filter);
+
+</script>

@@ -1,53 +1,6 @@
 ﻿@model ASPRestaurant.Data.Table
 
 @{
-    ViewData["Title"] = "Детайли за маса";
+    ViewData["Title"] = "Детайли";
 }
 
-@{
-    var now = DateTime.Now;
-
-    bool isAvailable = !Model.Reservations.Any(r =>
-    {
-        var start = r.Date.Date + r.Time;
-        var end = start.AddHours(2).AddMinutes(10);
-
-        return now >= start && now <= end;
-    });
-}
-
-<div class="details-wrapper">
-
-    <div class="details-card">
-
-        <div class="details-body">
-
-            <h1>Маса @Model.TableNumber</h1>
-
-            <p class="details-desc">@Model.Description</p>
-
-            <div class="details-info">
-                <div class="info-box">👥 @Model.Count места</div>
-
-                <div class="info-box">
-                    @(isAvailable ? "Свободна" : "Заета")
-                </div>
-            </div>
-
-            <div class="details-actions">
-                <a href="javascript:history.back()" class="btn-back">← Назад</a>
-
-                @if (isAvailable)
-                {
-                    <a href="/Reservations/Create?tableId=@Model.Id"
-                       class="btn btn-success">
-                        Резервирай
-                    </a>
-                }
-            </div>
-
-        </div>
-
-    </div>
-
-</div>

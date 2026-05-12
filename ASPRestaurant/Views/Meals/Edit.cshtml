@@ -1,7 +1,7 @@
 ﻿@model ASPRestaurant.Data.Meal
 
 @{
-    ViewData["Title"] = "Редактирай ястие";
+    ViewData["Title"] = "Редактирай";
 }
 
 <div class="create-page">
@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <label asp-for="CoverImage" class="form-label">Снимка</label>
-                <input asp-for="CoverImage" class="form-control" type="file" accept="image/*" />
+                <input name="coverImageFile" class="form-control" type="file" accept="image/*" />
                 <span asp-validation-for="CoverImage" class="text-danger"></span>
                 <small class="text-muted">Поддържани формати: JPG, PNG, GIF (макс. 5MB)</small>
                 
@@ -58,7 +58,6 @@
             <div class="form-group">
                 <label asp-for="TypeOrderId" class="form-label">Категория</label>
                 <select asp-for="TypeOrderId" class="form-control" asp-items="ViewBag.TypeOrderId">
-                    <option value="">Изберете категория</option>
                 </select>
                 <span asp-validation-for="TypeOrderId" class="text-danger"></span>
             </div>
@@ -67,9 +66,6 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Запази промените
                 </button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Отмени
-                </a>
                 <a asp-action="Index" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Назад
                 </a>
@@ -83,7 +79,7 @@
     
     <script>
         // Преглед на изображение преди качване
-        document.getElementById('CoverImage').addEventListener('change', function(e) {
+        document.querySelector('input[name="coverImageFile"]').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();

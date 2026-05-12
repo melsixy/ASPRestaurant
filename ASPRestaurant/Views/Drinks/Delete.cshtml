@@ -1,40 +1,26 @@
 ﻿@model ASPRestaurant.Data.Drink
 
 @{
-    ViewData["Title"] = "Изтрий напитка";
+    ViewData["Title"] = "Изтриване";
 }
 
 <div class="delete-page">
     <div class="delete-card">
         <h2>Потвърдете изтриване</h2>
-        <p>Сигурни ли сте, че искате да изтриете тази напитка?</p>
+        <p>Сигурни ли сте, че искате да изтриете
+           <b>@Model.Name</b> ?
+        </p>
         
         <div class="delete-details">
             <h3>@Model.Name</h3>
             
             <dl>
-                <dt>Описание</dt>
-                <dd>@Model.Description</dd>
 
                 <dt>Цена</dt>
                 <dd>@Model.Price.ToString("F2") €</dd>
 
                 <dt>Количество</dt>
                 <dd>@Model.Litre L</dd>
-
-                <dt>Тип</dt>
-                <dd>
-                    @if (!string.IsNullOrEmpty(Model.TypeOrders?.Name) &&
-                                        Model.TypeOrders.Name.ToLower().Contains("алкохол"))
-                    {
-                        <span class="status-badge status-available">Алкохолна напитка</span>
-                    }
-                    else
-                    {
-                        <span class="status-badge status-pending">Безалкохолна напитка</span>
-                    }
-                </dd>
-
                 <dt>Категория</dt>
                 <dd>@Model.TypeOrders?.Name</dd>
             </dl>
@@ -54,9 +40,6 @@
                 <button type="submit" class="btn btn-danger">
                     <i class="fas fa-trash"></i> Изтрий
                 </button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Отмени
-                </a>
                 <a asp-action="Index" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Назад
                 </a>
@@ -67,7 +50,7 @@
 
 @section Scripts {
     <script>
-        // Анимация при зареждане
+
         document.addEventListener('DOMContentLoaded', function() {
             const card = document.querySelector('.delete-card');
             card.style.animation = 'fadeInUp 0.6s ease-out';

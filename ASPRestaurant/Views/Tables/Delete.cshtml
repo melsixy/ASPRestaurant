@@ -1,97 +1,68 @@
 ﻿@model ASPRestaurant.Data.Table
 
 @{
-    ViewData["Title"] = "Изтрий маса";
+
+    ViewData["Title"] = "Изтриване";
 }
 
-<div class="delete-page">
-    <div class="delete-card">
-        <h2>Потвърдете изтриване</h2>
-        <p>Сигурни ли сте, че искате да изтриете тази маса?</p>
-        
-        <div class="delete-details">
-            <h3>Маса №@Model.TableNumber</h3>
-            
-            <dl>
-                <dt>Описание</dt>
-                <dd>@Model.Description</dd>
-                
-                <dt>Капацитет</dt>
-                <dd>@Model.Count места</dd>
-                
-                <dt>Локация</dt>
-                <dd>
-                    @if (Model.TableNumber <= 2)
-                    {
-                        <span class="status-badge status-available">До прозореца</span>
-                    }
-                    else if (Model.TableNumber <= 4)
-                    {
-                        <span class="status-badge status-available">Централна</span>
-                    }
-                    else if (Model.TableNumber <= 6)
-                    {
-                        <span class="status-badge status-available">На терасата</span>
-                    }
-                    else
-                    {
-                        <span class="status-badge status-available">Тераса</span>
-                    }
-                </dd>
-                
-                <dt>Статус</dt>
-                <dd>
-                    @{
-                        var now = DateTime.Now;
+@functions {
+    public string GetTableImage(string zone)
+    {
+        if (string.IsNullOrEmpty(zone))
+            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
 
-                        bool isAvailable = !Model.Reservations.Any(r =>
-                        {
-                            var start = r.Date.Date + r.Time;
-                            var end = start.AddHours(2).AddMinutes(10);
+        zone = zone.ToLower();
 
-                            return now >= start && now <= end;
-                        });
-                    }
-                </dd>
-                
-                <dt>Резервации</dt>
-                <dd>
-                    @if (Model.Reservations != null)
-                    {
-                        <span>@Model.Reservations.Count() активни резервации</span>
-                    }
-                    else
-                    {
-                        <span class="text-muted">Няма резервации</span>
-                    }
-                </dd>
-            </dl>
+        if (zone.Contains("море"))
+            return "https://kalamakirestaurant.com/wp-content/uploads/2023/08/opengra.jpg";
+
+        if (zone.Contains("плаж"))
+            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
+
+        if (zone.Contains("градина"))
+            return "https://theglossarymagazine.com/wp-content/uploads/2020/07/The-Berkeley-Terrace-JustinDeSouza-98-e1598568995367.jpg";
+
+        if (zone.Contains("тераса"))
+            return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
+
+        return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
+    }
+}
+
+<div class="form-page">
+    <div class="delete-modern-card">
+
+        <h1>🗑 Изтриване на маса</h1>
+        <p class="subtitle">Сигурни ли сте, че искате да изтриете тази маса?</p>
+
+        <!-- СНИМКА -->
+        <div class="details-image">
+            <img src="@GetTableImage(Model.Description)" alt="Table image" />
         </div>
-        
-        <form asp-action="Delete" method="post">
+
+        <!-- ИНФО -->
+        <div class="details-info">
+            <div class="info-box">🪑 Маса №@Model.TableNumber</div>
+            <div class="info-box">📝 @Model.Description</div>
+            <div class="info-box">👥 @Model.Count места</div>
+        </div>
+
+        <!-- FORM -->
+        <form asp-action="Delete" method="post" class="details-buttons mt-4">
             <input type="hidden" asp-for="Id" />
-            
-            <div class="delete-actions">
-                <button type="submit" class="btn btn-danger">
-                    <i class="fas fa-trash"></i> Изтрий
-                </button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Отмени
-                </a>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </a>
-            </div>
+
+            <button type="submit" class="btn btn-danger">
+                🗑 Изтрий
+            </button>
+
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                Отмени
+            </a>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Назад
+            </a>
         </form>
+
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Анимация при зареждане
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.delete-card');
-            card.style.animation = 'fadeInUp 0.6s ease-out';
-        });
-    </script>
-}

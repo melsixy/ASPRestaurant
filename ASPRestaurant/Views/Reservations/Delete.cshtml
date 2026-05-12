@@ -6,67 +6,95 @@
 
 <div class="delete-page">
     <div class="delete-card">
-        <h2>Потвърдете изтриване</h2>
-        <p>Сигурни ли сте, че искате да изтриете тази резервация?</p>
-        
-        <div class="delete-details">
-            <h3>Резервация #@Model.Id</h3>
-            
-            <dl>
-                <dt>Дата</dt>
-                <dd>@Model.Date.ToString("dd.MM.yyyy")</dd>
-                
-                <dt>Час</dt>
-                <dd>@Model.Time.ToString(@"hh\:mm")</dd>
-                
-                <dt>Брой хора</dt>
-                <dd>@Model.NumberOfPeople</dd>
-                
-                <dt>Маса</dt>
-                <dd>
-                    @if (Model.Tables != null)
-                    {
-                        <span class="status-badge status-available">Маса @Model.Tables.TableNumber</span>
-                        <small class="text-muted">@Model.Tables.Description</small>
-                    }
-                    else
-                    {
-                        <span class="text-muted">Без маса</span>
-                    }
-                </dd>
-                
-                <dt>Клиент</dt>
-                <dd>@Model.Clients?.UserName</dd>
-                
-                <dt>Регистрирана на</dt>
-                <dd>@Model.RegisterOn.ToString("dd.MM.yyyy HH:mm")</dd>
-            </dl>
-        </div>
-        
-        <form asp-action="Delete" method="post">
-            <input type="hidden" asp-for="Id" />
-            
-            <div class="delete-actions">
-                <button type="submit" class="btn btn-danger">
-                    <i class="fas fa-trash"></i> Изтрий
-                </button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Отмени
-                </a>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </a>
+
+        <h1>Изтриване на резервация</h1>
+
+        <p>
+            Сигурни ли сте, че искате да изтриете тази резервация?
+        </p>
+
+        <div class="reservation-info-box">
+
+            <div class="info-item">
+                <span>📅 Дата</span>
+                <strong>@Model.Date.ToString("dd.MM.yyyy")</strong>
             </div>
+
+            <div class="info-item">
+                <span>⏰ Час</span>
+                <strong>@Model.Time.ToString(@"hh\:mm")</strong>
+            </div>
+
+            <div class="info-item">
+                <span>👥 Брой хора</span>
+                <strong>@Model.NumberOfPeople</strong>
+            </div>
+
+            <div class="info-item">
+                <span>🍽️ Маса</span>
+
+                @if (Model.Tables != null)
+                {
+                    <strong>
+                        Маса @Model.Tables.TableNumber
+                    </strong>
+                }
+                else
+                {
+                    <strong>Без маса</strong>
+                }
+            </div>
+
+            <div class="info-item">
+                <span>👤 Клиент</span>
+                <strong>@Model.Clients?.UserName</strong>
+            </div>
+
+            <div class="info-item">
+                <span>🕒 Създадена</span>
+                <strong>@Model.RegisterOn.ToString("dd.MM.yyyy, HH:mm ч.")</strong>
+            </div>
+
+        </div>
+
+        <form asp-action="Delete" method="post">
+
+
+            <div class="delete-buttons">
+
+                <button type="submit" class="btn btn-danger">
+                    Изтрий
+                </button>
+
+
+                <a asp-action="Index"
+                   class="btn btn-outline-primary">
+                    Назад
+                </a>
+
+            </div>
+
         </form>
+
     </div>
+
 </div>
 
 @section Scripts {
     <script>
-        // Анимация при зареждане
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.delete-card');
-            card.style.animation = 'fadeInUp 0.6s ease-out';
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const card = document.querySelector(".reservation-delete-card");
+
+            card.style.opacity = "0";
+            card.style.transform = "translateY(40px)";
+
+            setTimeout(() => {
+                card.style.transition = "0.5s ease";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, 100);
+
         });
     </script>
 }

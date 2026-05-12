@@ -105,7 +105,7 @@ namespace ASPRestaurant.Controllers
             {
                 return NotFound();
             }
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Id", drink.TypeOrderId);
+            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
             return View(drink);
         }
 

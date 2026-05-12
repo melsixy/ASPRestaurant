@@ -71,13 +71,12 @@
 							</span>
 						</li>
 
-						<li class="nav-item">
-							<form method="post" asp-area="Identity" asp-page="/Account/Logout">
-								<button type="submit" class="nav-link btn btn-link">
-									Изход
-								</button>
-							</form>
-						</li>
+						<form method="post" asp-area="Identity" asp-page="/Account/Logout"
+							  asp-route-returnUrl="/">
+							<button type="submit" class="nav-link btn btn-link">
+								Изход
+							</button>
+						</form>
 					}
 					else
 					{

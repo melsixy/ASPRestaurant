@@ -60,11 +60,11 @@ namespace ASPRestaurant.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reservation reservation)
         {
-            reservation.RegisterOn = DateTime.Now;
-            reservation.ClientId = _userManager.GetUserId(User);
-
             if (!ModelState.IsValid)
                 return View(reservation);
+
+            reservation.RegisterOn = DateTime.Now;
+            reservation.ClientId = _userManager.GetUserId(User);
 
             var table = await _context.Tables
                 .Include(t => t.Reservations)
@@ -203,6 +203,40 @@ namespace ASPRestaurant.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> QuickReserve(int tableId)
+        {
+            var now = DateTime.Now;
+
+            var reservation = new Reservation
+            {
+                TableId = tableId,
+                Date = DateTime.Today,
+                Time = DateTime.Now.TimeOfDay,
+                NumberOfPeople = 2,
+                RegisterOn = DateTime.Now,
+                ClientId = _userManager.GetUserId(User)
+            };
+
+            var reservations = await _context.Reservations
+    .Where(r => r.TableId == tableId)
+    .ToListAsync();
+
+            var isBusy = reservations.Any(r =>
+            {
+                var start = r.Date.Date.Add(r.Time);
+                var end = start.AddHours(2).AddMinutes(10);
+
+                return now >= start && now <= end;
+            });
+
+            _context.Reservations.Add(reservation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Tables");
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.Meal>
 
 @{
-	ViewData["Title"] = "Ястия";
 	var grouped = Model.GroupBy(x => x.TypeOrders?.Name ?? "Без категория");
 }
 
@@ -18,42 +17,65 @@
 		</div>
 	}
 
+	<div class="row justify-content-center mb-4">
+
+		<div class="col-md-4">
+			<input id="mealSearch"
+				   class="form-control"
+				   placeholder="Търси ястие..." />
+		</div>
+
+		<div class="col-md-4">
+			<select id="mealCategory" class="form-control">
+
+				<option value="">Всички категории</option>
+
+				@foreach (var g in grouped.Select(x => x.Key))
+				{
+					<option value="@g">@g</option>
+				}
+
+			</select>
+		</div>
+
+	</div>
+
 	@foreach (var group in grouped)
 	{
-		<h2 class="category-title text-center mt-5 mb-3">
-			@group.Key
-		</h2>
+		<h2 class="category-title text-center mt-4 mb-3">@group.Key</h2>
 
 		<div class="row justify-content-center">
 
 			@foreach (var item in group)
 			{
-				<div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+				<div class="col-lg-3 col-md-4 col-sm-6 mb-4 meal-item">
 
-					<div class="master-card">
+					<div class="master-card"
+						 data-name="@item.Name"
+						 data-category="@(item.TypeOrders?.Name ?? "")">
 
-						<div>
-							<img src="@(string.IsNullOrEmpty(item.CoverImage)
-														  ? "https://via.placeholder.com/300x200"
-														  : item.CoverImage)"
-						 alt="@item.Name" />
-				</div>
+						<img src="@(string.IsNullOrEmpty(item.CoverImage)
+													  		 ? "https://via.placeholder.com/300x200"
+													 		 : item.CoverImage)" />
+
 
 						<div class="master-card-body">
 
 							<h3>@item.Name</h3>
-
-							<p class="menu-desc">
-								@(string.IsNullOrWhiteSpace(item.Alergens) ? "Алергени: няма" : $"🥛 Алергени: {item.Alergens}")
+							<p>
+								@(string.IsNullOrWhiteSpace(item.Alergens)
+														? "⚠️ Алергени: няма"
+														: $"⚠️ Алергени: {item.Alergens}")
+				        	</p>
+							<p>
+						        💰 Грамаж: @item.Grammage g
+							</p>
+							<p>
+						        ⚖️ Цена: @item.Price.ToString("0.00") €
 							</p>
 
-							<div class="menu-info">
-								<span>🍽 Категория: @item.TypeOrders?.Name</span>
-								<p>⚖️ Грамаж: @item.Grammage g</p>
-								<p class="price">💰 Цена: @item.Price.ToString("0.00") €</p>
-							</div>
 
-							<div class="drink-actions mt-auto">
+							<div class="drink-actions">
 
 								<a asp-action="Details"
 								   asp-route-id="@item.Id"
@@ -89,3 +111,42 @@
 	}
 
 </div>
+
+<script>
+
+	var search = document.getElementById("mealSearch");
+	var category = document.getElementById("mealCategory");
+	var items = document.getElementsByClassName("meal-item");
+
+	function filterMeals() {
+
+		var text = search.value.toLowerCase();
+		var cat = category.value.toLowerCase();
+
+		for (var i = 0; i < items.length; i++) {
+
+			var card = items[i].querySelector(".master-card");
+
+			var name = card.getAttribute("data-name").toLowerCase();
+
+			var categoryValue =
+				card.getAttribute("data-category").toLowerCase();
+
+			var matchSearch = name.startsWith(text);
+
+			var matchCategory =
+				cat == "" || categoryValue == cat;
+
+			if (matchSearch && matchCategory) {
+				items[i].style.display = "";
+			}
+			else {
+				items[i].style.display = "none";
+			}
+		}
+	}
+
+	search.addEventListener("input", filterMeals);
+	category.addEventListener("change", filterMeals);
+
+</script>

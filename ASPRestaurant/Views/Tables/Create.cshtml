@@ -14,25 +14,23 @@
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- NUMBER -->
+
             <div class="form-group">
                 <label asp-for="TableNumber">Номер на маса</label>
                 <input asp-for="TableNumber" class="form-control" />
             </div>
 
-            <!-- CAPACITY -->
             <div class="form-group mt-2">
                 <label asp-for="Count">Капацитет</label>
                 <input asp-for="Count" class="form-control" />
             </div>
 
-            <!-- DESCRIPTION -->
+
             <div class="form-group mt-2">
                 <label asp-for="Description">Описание</label>
                 <textarea asp-for="Description" class="form-control"></textarea>
             </div>
 
-            <!-- hidden field for zone -->
             <input type="hidden" id="Zone" name="Zone" />
 
             <h3 class="mt-4">Избери местоположение</h3>
