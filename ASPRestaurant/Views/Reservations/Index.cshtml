@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-md-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Клиент...">
+                <input type="text" class="form-control" id="searchInput" placeholder="Клиент или маса...">
             </div>
 
         </div>
@@ -72,14 +72,21 @@
 
                     <tr data-date="@reservation.Date.ToString("yyyy-MM-dd")"
                         data-time="@reservation.Time.ToString(@"hh\:mm")"
-                        data-client="@reservation.Clients?.UserName"
+                        data-client="@reservation.Clients?.UserName?.ToLower()"
+                        data-description="@reservation.Tables?.Description?.ToLower()"
                         data-status="@status">
 
                         <td>@reservation.Date.ToString("dd.MM.yyyy")</td>
                         <td>@reservation.Time.ToString(@"hh\:mm")</td>
                         <td>@reservation.Clients?.UserName</td>
                         <td>@reservation.NumberOfPeople</td>
-                        <td>Маса @reservation.Tables?.TableNumber</td>
+                        <td>
+                            Маса @reservation.Tables?.TableNumber
+                            @if (!string.IsNullOrEmpty(reservation.Tables?.Description))
+                            {
+                                <small>(@reservation.Tables.Description)</small>
+                            }
+                        </td>
 
                         <td>
                             @if (status == "active")
@@ -97,10 +104,8 @@
                         </td>
 
                         <td>
-
                             @if (User.IsInRole("Admin"))
                             {
-
                                 <a asp-action="Edit" asp-route-id="@reservation.Id" class="btn btn-warning btn-sm">
                                     Редакция
                                 </a>
@@ -133,21 +138,28 @@
 
             const date = dateFilter.value;
             const time = timeFilter.value;
-            const search = searchInput.value.toLowerCase();
+            const search = searchInput.value.toLowerCase().trim();
             const status = statusFilter.value;
 
             rows.forEach(row => {
 
                 const rDate = row.dataset.date;
                 const rTime = row.dataset.time;
-                const rClient = row.dataset.client?.toLowerCase() || "";
+                const rClient = row.dataset.client || "";
+                const rDescription = row.dataset.description || "";
                 const rStatus = row.dataset.status;
 
                 let show = true;
 
                 if (date && rDate !== date) show = false;
                 if (time && !rTime.startsWith(time)) show = false;
-                if (search && !rClient.includes(search)) show = false;
+
+                if (search &&
+                    !rClient.includes(search) &&
+                    !rDescription.includes(search)) {
+                    show = false;
+                }
+
                 if (status && rStatus !== status) show = false;
 
                 row.style.display = show ? "" : "none";
@@ -158,5 +170,6 @@
         timeFilter.addEventListener("input", filter);
         searchInput.addEventListener("input", filter);
         statusFilter.addEventListener("change", filter);
+
     });
 </script>

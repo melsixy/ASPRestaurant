@@ -126,14 +126,13 @@ namespace ASPRestaurant.Controllers
 
             if (ModelState.IsValid)
             {
-                // обновяване на полета
+
                 existing.Name = drink.Name;
                 existing.Description = drink.Description;
                 existing.Litre = drink.Litre;
                 existing.Price = drink.Price;
                 existing.TypeOrderId = drink.TypeOrderId;
 
-                // 🔥 СНИМКА
                 if (coverImageFile != null && coverImageFile.Length > 0)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
@@ -146,7 +145,6 @@ namespace ASPRestaurant.Controllers
 
                     existing.CoverImage = "/images/" + fileName;
                 }
-                // ❗ ако няма нова снимка → старата остава
 
                 await _context.SaveChangesAsync();
 

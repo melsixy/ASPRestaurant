@@ -67,6 +67,7 @@ html {
     color: #1e3c72;
     letter-spacing: 2px;
 }
+
     .category-title::after {
         content: "";
         display: block;
@@ -312,22 +313,22 @@ textarea {
     justify-content: center;
     gap: 12px;
 }
-    /* OVERLAY */
-    .table-modern .overlay {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        padding: 12px;
-        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-        color: white;
-        font-weight: 600;
-    }
+/* OVERLAY */
+.table-modern .overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    color: white;
+    font-weight: 600;
+}
 
-    /* SELECTED */
-    .table-modern.selected {
-        border: 3px solid #87CEEB;
-        transform: scale(1.03);
-    }
+/* SELECTED */
+.table-modern.selected {
+    border: 3px solid #87CEEB;
+    transform: scale(1.03);
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -440,7 +441,7 @@ footer {
 .contact-form {
     max-width: 600px;
     margin: auto;
-    background:#79c1f1;
+    background: #79c1f1;
     border-radius: 25px;
     box-shadow: 0 20px 50px rgba(30,60,114,0.15);
 }
@@ -575,6 +576,7 @@ footer {
     align-items: center;
     padding: 40px 20px;
 }
+
 .category-card {
     transition: 0.3s;
 }
@@ -582,7 +584,7 @@ footer {
     .category-card:hover {
         transform: translateY(-8px);
     }
-/* FORM CARD */
+
 .category-form-card,
 .details-modern-card,
 .delete-modern-card {
@@ -594,7 +596,6 @@ footer {
     text-align: center;
     box-shadow: 0 20px 50px rgba(0,0,0,0.12);
 }
-
     /* TITLES */
     .category-form-card h1,
     .details-modern-card h1,
@@ -603,7 +604,6 @@ footer {
         margin-bottom: 10px;
     }
 
-/* SUBTITLE */
 .subtitle {
     color: #6c757d;
     margin-bottom: 25px;
@@ -616,14 +616,12 @@ footer {
     border: 1px solid #dbe4f0;
 }
 
-/* DETAILS */
 .details-date {
     font-size: 16px;
     color: #555;
     margin: 20px 0;
 }
 
-/* BUTTON GROUP */
 .details-buttons {
     display: flex;
     gap: 10px;
@@ -713,7 +711,6 @@ footer {
     padding: 40px 20px;
 }
 
-/* CARD */
 .reservation-delete-card {
     width: 100%;
     max-width: 750px;
@@ -723,13 +720,12 @@ footer {
     box-shadow: 0 25px 60px rgba(0,0,0,0.12);
     text-align: center;
 }
-/* TITLE */
-.reservation-delete-card h1 {
-    color: #1e3c72;
-    margin-bottom: 10px;
-}
 
-/* SUBTITLE */
+    .reservation-delete-card h1 {
+        color: #1e3c72;
+        margin-bottom: 10px;
+    }
+
 .delete-subtitle {
     color: #6c757d;
     margin-bottom: 30px;
@@ -744,7 +740,6 @@ footer {
     margin-bottom: 30px;
 }
 
-/* INFO ITEM */
 .info-item {
     display: flex;
     justify-content: space-between;
@@ -775,7 +770,6 @@ footer {
     flex-wrap: wrap;
 }
 
-    /* BTN */
     .delete-buttons .btn {
         min-width: 150px;
         border-radius: 25px;
@@ -788,7 +782,6 @@ footer {
             transform: translateY(-3px);
         }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
 
     .reservation-delete-card {
@@ -808,4 +801,50 @@ footer {
         .delete-buttons .btn {
             width: 100%;
         }
+}
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 260px;
+    max-width: 400px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: popIn 0.25s ease forwards, fadeOut 0.5s ease 2.5s forwards;
+}
+
+.alert-danger {
+    background: rgba(255, 70, 70, 0.95);
+    color: white;
+}
+
+.alert-success {
+    background: rgba(40, 200, 120, 0.95);
+    color: white;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
 }

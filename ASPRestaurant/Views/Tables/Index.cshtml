@@ -31,6 +31,7 @@
     </div>
 }
 
+
 <div class="table-modern-grid">
 
     @foreach (var item in Model)
@@ -44,6 +45,22 @@
 
             return now >= start && now <= end;
         }) ?? false);
+
+        @if (TempData["ErrorTableId"] != null &&
+            (int)TempData["ErrorTableId"] == item.Id)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessTableId"] != null &&
+            (int)TempData["SuccessTableId"] == item.Id)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
 
         <div class="table-modern-card @(isAvailable ? "free" : "busy")"
              data-number="@item.TableNumber"

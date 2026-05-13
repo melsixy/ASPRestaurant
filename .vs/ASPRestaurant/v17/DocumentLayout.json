@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|c:\\users\\user\\desktop\\asprestaurant\\asprestaurant\\asprestaurant\\views\\home\\gallery.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\views\\home\\gallery.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|c:\\users\\user\\desktop\\asprestaurant\\asprestaurant\\asprestaurant\\controllers\\reservationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\controllers\\reservationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -15,12 +19,8 @@
       "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|c:\\users\\user\\desktop\\asprestaurant\\asprestaurant\\asprestaurant\\views\\drinks\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\views\\drinks\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|c:\\users\\user\\desktop\\asprestaurant\\asprestaurant\\asprestaurant\\views\\meals\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\views\\meals\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|c:\\users\\user\\desktop\\asprestaurant\\asprestaurant\\asprestaurant\\views\\tables\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{35B8DDC8-F341-4728-8948-6D87A356D47D}|ASPRestaurant\\ASPRestaurant.csproj|solutionrelative:asprestaurant\\views\\tables\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,17 +30,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "site.css",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "ASPRestaurant\\wwwroot\\css\\site.css",
               "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\wwwroot\\css\\site.css",
               "RelativeToolTip": "ASPRestaurant\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAOsAAAAAAAAAAAAAAAQBAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAFIDAAAAAAAAAAAAALEBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
               "WhenOpened": "2026-04-19T16:30:01.27Z",
               "IsPinned": true
@@ -51,7 +51,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "Gallery.cshtml",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Home\\Gallery.cshtml",
+              "RelativeDocumentMoniker": "ASPRestaurant\\Views\\Home\\Gallery.cshtml",
+              "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Home\\Gallery.cshtml",
+              "RelativeToolTip": "ASPRestaurant\\Views\\Home\\Gallery.cshtml",
+              "ViewState": "AgIAADAAAAAAAAAAAADgv2QAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-13T20:37:43.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Tables\\Create.cshtml",
+              "RelativeDocumentMoniker": "ASPRestaurant\\Views\\Tables\\Create.cshtml",
+              "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Tables\\Create.cshtml",
+              "RelativeToolTip": "ASPRestaurant\\Views\\Tables\\Create.cshtml",
+              "ViewState": "AgIAACAAAAAAAAAAAIAwwDcAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-13T18:15:06.614Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Table.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Data\\Table.cs",
               "RelativeDocumentMoniker": "ASPRestaurant\\Data\\Table.cs",
@@ -59,45 +84,20 @@
               "RelativeToolTip": "ASPRestaurant\\Data\\Table.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T17:36:55.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-13T17:36:55.897Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ReservationsController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Controllers\\ReservationsController.cs",
               "RelativeDocumentMoniker": "ASPRestaurant\\Controllers\\ReservationsController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Controllers\\ReservationsController.cs",
               "RelativeToolTip": "ASPRestaurant\\Controllers\\ReservationsController.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAEIAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAOEAAAAAAAAAAAAAAPYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-12T20:39:37.169Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Drinks\\Details.cshtml",
-              "RelativeDocumentMoniker": "ASPRestaurant\\Views\\Drinks\\Details.cshtml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Drinks\\Details.cshtml",
-              "RelativeToolTip": "ASPRestaurant\\Views\\Drinks\\Details.cshtml",
-              "ViewState": "AgIAAAUAAAAAAAAAAIAwwBgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-12T20:14:20.797Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Meals\\Details.cshtml",
-              "RelativeDocumentMoniker": "ASPRestaurant\\Views\\Meals\\Details.cshtml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ASPRestaurant\\ASPRestaurant\\ASPRestaurant\\Views\\Meals\\Details.cshtml",
-              "RelativeToolTip": "ASPRestaurant\\Views\\Meals\\Details.cshtml",
-              "ViewState": "AgIAABMAAAAAAAAAAIAwwB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-12T20:13:10.557Z"
             }
           ]
         },
