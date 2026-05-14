@@ -51,8 +51,8 @@
 						 data-category="@item.TypeOrders?.Name">
 
 						<img src="@(string.IsNullOrEmpty(item.CoverImage)
-											 ? "https://via.placeholder.com/300x200"
-											 : item.CoverImage)" />
+													 		 ? "https://via.placeholder.com/300x200"
+													 		 : item.CoverImage)" />
 
 				<div class="master-card-body">
 
@@ -60,14 +60,14 @@
 
 							<p>
 								📝 Описание: @item.Description
-							</p> 
+							</p>
 
 							<p>
 								🥤 Количество: @item.Litre ml
 							</p>
 
 							<p>
-								💰 Цена: @item.Price.ToString("0.00") €
+								⚖️ Цена: @(item.Price?.ToString("0.00") ?? "0.00") €
 							</p>
 
 
@@ -100,7 +100,7 @@
 					</div>
 
 				</div>
-				}
+			}
 
 
 		</div>

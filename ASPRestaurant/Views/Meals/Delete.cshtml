@@ -1,48 +1,49 @@
 ﻿@model ASPRestaurant.Data.Meal
 
 @{
-    ViewData["Title"] = "Изтриване";
+	ViewData["Title"] = "Изтриване";
 }
 
 <div class="delete-page">
-    <div class="delete-card">
+	<div class="delete-card">
 
-        <h2>Изтриване</h2>
+		<h2>Изтриване</h2>
 
-        <p>
-            Сигурни ли сте, че искате да изтриете:
-            <b>@Model.Name</b> ?
-        </p>
+		<p>
+			Сигурни ли сте, че искате да изтриете:
+			<b>@Model.Name</b> ?
+		</p>
 
-        <div class="delete-details">
-            <h3>@Model.Name</h3>
-        <hr />
+		<div class="delete-details">
+			<h3>@Model.Name</h3>
+			<hr />
 
-        <p><b>Цена:</b> @Model.Price.ToString("F2") €</p>
+			<p><b>Цена:</b> @(Model.Price?.ToString("F2")) €</p>
 
-        <p><b>Грамаж:</b> @Model.Grammage g</p>
+			<p><b>Грамаж:</b> @Model.Grammage g</p>
 
-        <p><b>Категория:</b> @Model.TypeOrders?.Name</p>
+			<p><b>Категория:</b> @Model.TypeOrders?.Name</p>
 
-        @if (!string.IsNullOrEmpty(Model.CoverImage))
-        {
-            <img src="@Model.CoverImage"
-                 style="max-width:150px; border-radius:10px;" />
-        }
+			@if (!string.IsNullOrEmpty(Model.CoverImage))
+			{
+				<img src="@Model.CoverImage"
+					 style="max-width:150px; border-radius:10px;" />
+			}
 
-        <form asp-action="Delete" method="post" class="mt-3">
+			<form asp-action="Delete" method="post" class="mt-3">
 
-            <input type="hidden" asp-for="Id" />
+				<input type="hidden" asp-for="Id" />
 
-            <button type="submit" class="btn btn-danger">
-                Изтрий
-            </button>
+				<button type="submit" class="btn btn-danger">
+					Изтрий
+				</button>
 
-            <a asp-action="Index" class="btn btn-dark">
-                Назад
-            </a>
+				<a asp-action="Index" class="btn btn-dark">
+					Назад
+				</a>
 
-        </form>
+			</form>
 
-    </div>
+		</div>
+	</div>
 </div>

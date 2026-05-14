@@ -56,15 +56,20 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,TableNumber,Count")] Table table)
+        public async Task<IActionResult> Create(Table table)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(table.Description) ||
+                table.TableNumber <= 0 ||
+                table.Count <= 0)
             {
-                _context.Add(table);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Моля, попълнете всички полета!");
+                return View(table);
             }
-            return View(table);
+
+            _context.Add(table);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Tables/Edit/5
@@ -88,36 +93,40 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,TableNumber,Count")] Table table)
+        public async Task<IActionResult> Edit(int id, Table table)
         {
             if (id != table.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(table.Description) ||
+                table.TableNumber <= 0 ||
+                table.Count <= 0)
             {
-                try
-                {
-                    _context.Update(table);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TableExists(table.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Моля, попълнете всички полета!");
+                return View(table);
             }
-            return View(table);
-        }
 
+            try
+            {
+                _context.Update(table);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TableExists(table.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
         // GET: Tables/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

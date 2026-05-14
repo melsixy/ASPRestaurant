@@ -75,13 +75,13 @@
 
 @section Scripts {
     <script>
-        function selectTable(id) {
+        function selectTable(id, el) {
             document.getElementById("TableId").value = id;
 
             document.querySelectorAll(".table-modern")
                 .forEach(x => x.classList.remove("selected"));
 
-            event.currentTarget.classList.add("selected");
+            el.classList.add("selected");
         }
     </script>
 }

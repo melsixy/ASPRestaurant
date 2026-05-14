@@ -17,7 +17,7 @@
             <dl>
 
                 <dt>Цена</dt>
-                <dd>@Model.Price.ToString("F2") €</dd>
+                <dd>@(Model.Price?.ToString("F2")) €</dd>
 
                 <dt>Количество</dt>
                 <dd>@Model.Litre L</dd>

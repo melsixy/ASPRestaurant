@@ -37,7 +37,7 @@
 			</div>
 
 			<div class="info-box">
-				💰 Цена: <strong>@Model.Price.ToString("0.00") €</strong>
+				💰 Цена: <strong>@(Model.Price?.ToString("0.00") ?? "0.00") €</strong>
 			</div>
 
 

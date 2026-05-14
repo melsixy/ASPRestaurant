@@ -47,7 +47,7 @@
         }) ?? false);
 
         @if (TempData["ErrorTableId"] != null &&
-            (int)TempData["ErrorTableId"] == item.Id)
+        (int)TempData["ErrorTableId"] == item.Id)
         {
             <div class="alert alert-danger">
                 @TempData["ErrorMessage"]

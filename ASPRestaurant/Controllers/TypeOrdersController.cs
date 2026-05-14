@@ -53,16 +53,20 @@ namespace ASPRestaurant.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RegisterOn")] TypeOrder typeOrder)
+        public async Task<IActionResult> Create(TypeOrder typeOrder)
         {
-           
-            if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(typeOrder.Name))
+                {
+                    ModelState.AddModelError("Name", "Моля, въведи категория!");
+                    return View(typeOrder);
+                }
+
                 _context.Add(typeOrder);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(typeOrder);
         }
 
         // GET: TypeOrders/Edit/5

@@ -9,9 +9,17 @@
 
         <h2>Вход в системата</h2>
 
-        <form id="account" method="post">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div class="toast-error">
+                    @error.ErrorMessage
+                </div>
+            }
+        }
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form id="account" method="post">
 
             <input asp-for="Input.UserName" class="form-control mb-3" placeholder="Потребителско име" />
 

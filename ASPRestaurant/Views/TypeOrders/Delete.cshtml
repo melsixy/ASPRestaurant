@@ -5,7 +5,6 @@
 }
 
 <div class="delete-page">
-
     <div class="delete-card">
 
         <h1>Изтриване</h1>
@@ -16,19 +15,12 @@
 
         <h3>@Model.Name</h3>
 
-        <form asp-action="Delete">
+        <button type="submit" class="btn btn-danger">
+            Изтрий
+        </button>
 
-            <input type="hidden" asp-for="Id" />
-
-            <button type="submit" class="btn btn-danger w-100">
-                Изтрий
-            </button>
-
-        </form>
-
-        <a asp-action="Index"
-           class="btn btn-secondary w-100 mt-3">
-            Отказ
+        <a asp-action="Index" class="btn btn-dark">
+            Назад
         </a>
 
     </div>

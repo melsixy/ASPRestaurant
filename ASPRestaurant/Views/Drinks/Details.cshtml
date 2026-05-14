@@ -30,12 +30,11 @@
                 </div>
 
                 <div class="info-box">
-                    🥤 Литри: <strong>@Model.Litre.ToString("0") ml</strong>
+                    🥤 Литри: <strong>@(Model.Litre?.ToString("0") ?? "0") ml</strong>
                 </div>
 
-
                 <div class="info-box">
-                    💰 Цена: <strong>@Model.Price.ToString("0.00") €</strong>
+                    💰 Цена: <strong>@(Model.Price?.ToString("0.00") ?? "0.00") €</strong>
                 </div>
 
             </div>

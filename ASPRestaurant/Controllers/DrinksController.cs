@@ -60,36 +60,36 @@ namespace ASPRestaurant.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Drink drink, IFormFile coverImageFile)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (coverImageFile != null && coverImageFile.Length > 0)
-                {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
-                    var path = Path.Combine("wwwroot/images", fileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await coverImageFile.CopyToAsync(stream);
-                    }
-
-                    drink.CoverImage = "/images/" + fileName;
-                }
-                else
-                {
-                    drink.CoverImage = "/images/default.jpg";
-                }
-
-                if (string.IsNullOrWhiteSpace(drink.Description))
-                {
-                    drink.Description = "няма";
-                }
-                _context.Add(drink);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name");
+                return View(drink);
             }
 
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
-            return View(drink);
+            if (coverImageFile != null && coverImageFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(coverImageFile.FileName);
+                var path = Path.Combine("wwwroot/images", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await coverImageFile.CopyToAsync(stream);
+                }
+
+                drink.CoverImage = "/images/" + fileName;
+            }
+            else
+            {
+                drink.CoverImage = "/images/default.jpg";
+            }
+
+            if (string.IsNullOrWhiteSpace(drink.Description))
+                drink.Description = "няма";
+
+            _context.Add(drink);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Drinks/Edit/5
@@ -119,42 +119,40 @@ namespace ASPRestaurant.Controllers
             if (id != drink.Id)
                 return NotFound();
 
+            if (!ModelState.IsValid)
+            {
+                ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name");
+                return View(drink);
+            }
+
             var existing = await _context.Drinks.FindAsync(id);
 
             if (existing == null)
                 return NotFound();
 
-            if (ModelState.IsValid)
+            existing.Name = drink.Name;
+            existing.Description = string.IsNullOrWhiteSpace(drink.Description) ? "няма" : drink.Description;
+            existing.Litre = drink.Litre;
+            existing.Price = drink.Price;
+            existing.TypeOrderId = drink.TypeOrderId;
+
+            if (coverImageFile != null && coverImageFile.Length > 0)
             {
+                var fileName = Guid.NewGuid() + Path.GetExtension(coverImageFile.FileName);
+                var path = Path.Combine("wwwroot/images", fileName);
 
-                existing.Name = drink.Name;
-                existing.Description = drink.Description;
-                existing.Litre = drink.Litre;
-                existing.Price = drink.Price;
-                existing.TypeOrderId = drink.TypeOrderId;
-
-                if (coverImageFile != null && coverImageFile.Length > 0)
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(coverImageFile.FileName);
-                    var path = Path.Combine("wwwroot/images", fileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await coverImageFile.CopyToAsync(stream);
-                    }
-
-                    existing.CoverImage = "/images/" + fileName;
+                    await coverImageFile.CopyToAsync(stream);
                 }
 
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
+                existing.CoverImage = "/images/" + fileName;
             }
 
-            ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name", drink.TypeOrderId);
-            return View(drink);
-        }
+            await _context.SaveChangesAsync();
 
+            return RedirectToAction(nameof(Index));
+        }
         // GET: Drinks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

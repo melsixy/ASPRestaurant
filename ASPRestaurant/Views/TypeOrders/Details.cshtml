@@ -1,34 +1,5 @@
 ﻿@model ASPRestaurant.Data.TypeOrder
 
 @{
-    ViewData["Title"] = "Детайли";
+	ViewData["Title"] = "Детайли";
 }
-
-<div class="category-page">
-
-    <div class="details-modern-card">
-
-        <h1>@Model.Name</h1>
-
-        <p class="details-date">
-            📅 Създадена:
-            @Model.RegisterOn.ToString("dd.MM.yyyy")
-        </p>
-
-        <div class="details-buttons">
-
-            <a asp-action="Edit"
-               asp-route-id="@Model.Id"
-               class="btn btn-primary">
-                Редактирай
-            </a>
-
-                <a href="javascript:history.back()" class="btn-back">
-                    ← Назад
-                </a>
-
-        </div>
-
-    </div>
-
-</div>

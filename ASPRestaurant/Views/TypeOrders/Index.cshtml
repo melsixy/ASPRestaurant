@@ -1,76 +1,59 @@
 ﻿@model IEnumerable<ASPRestaurant.Data.TypeOrder>
 
 @{
-    ViewData["Title"] = "Категории";
+	ViewData["Title"] = "Категории";
 }
 
 <div class="container py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="section-title text-center">
-            Категории
-        </h1>
+	<h1 class="section-title text-center">
+		Категории
+	</h1>
 
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-action="Create" class="btn btn-primary">
-                Добави категория
-            </a>
-        }
+    <div class="text-center mb-4">
+        <a asp-action="Create" class="btn btn-primary">
+           Добави категория
+        </a>
     </div>
 
-    @if (!Model.Any())
-    {
+@if (!Model.Any())
+{
         <div class="alert alert-info text-center">
             Няма добавени категории все още.
         </div>
-    }
-    else
-    {
-        <div class="row g-4">
+}
+else
+{
+        <div class="category-grid">
 
             @foreach (var item in Model)
             {
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex justify-content-center">
+                <div class="category-card">
 
-                    <div class="master-card category-card">
+                    <h3 class="category-title fw-bold">
+                        @item.Name
+                    </h3>
 
-                        <div class="master-card-body">
+                    <p class="menu-desc">
+                        📅 Създадена: @item.RegisterOn.ToString("dd.MM.yyyy")
+                    </p>
 
-                            <h3 class="text-primary fw-bold">
-                                @item.Name
-                            </h3>
+                    <div class="menu-actions mt-auto d-flex gap-2">
 
-                            <p class="menu-desc">
-                                📅 Създадена: @item.RegisterOn.ToString("dd.MM.yyyy")
-                            </p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="btn btn-warning btn-sm flex-fill">
+                                Редакция
+                            </a>
 
-                            <div class="menu-actions mt-auto d-flex gap-2">
-
-                                <a asp-action="Details"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-info btn-sm flex-fill">
-                                    Детайли
-                                </a>
-
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-warning btn-sm flex-fill">
-                                        Редакция
-                                    </a>
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-danger btn-sm flex-fill">
-                                        Изтрий
-                                    </a>
-                                }
-
-                            </div>
-
-                        </div>
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="btn btn-danger btn-sm flex-fill">
+                                Изтрий
+                            </a>
+                        }
 
                     </div>
 
@@ -78,6 +61,6 @@
             }
 
         </div>
-    }
+}
 
 </div>

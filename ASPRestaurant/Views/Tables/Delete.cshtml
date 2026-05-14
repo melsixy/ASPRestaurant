@@ -5,59 +5,24 @@
     ViewData["Title"] = "Изтриване";
 }
 
-@functions {
-    public string GetTableImage(string zone)
-    {
-        if (string.IsNullOrEmpty(zone))
-            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
+<div class="delete-page">
+    <div class="delete-card">
 
-        zone = zone.ToLower();
-
-        if (zone.Contains("море"))
-            return "https://kalamakirestaurant.com/wp-content/uploads/2023/08/opengra.jpg";
-
-        if (zone.Contains("плаж"))
-            return "https://i.pinimg.com/474x/1a/8f/c1/1a8fc1de823824330922567e057f5e13.jpg";
-
-        if (zone.Contains("градина"))
-            return "https://theglossarymagazine.com/wp-content/uploads/2020/07/The-Berkeley-Terrace-JustinDeSouza-98-e1598568995367.jpg";
-
-        if (zone.Contains("тераса"))
-            return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
-
-        return "https://i.pinimg.com/736x/c9/8f/92/c98f92087aa58b94799cee12f389b255.jpg";
-    }
-}
-
-<div class="form-page">
-    <div class="delete-modern-card">
-
-        <h1>🗑 Изтриване на маса</h1>
+        <h1> Изтриване на маса</h1>
         <p class="subtitle">Сигурни ли сте, че искате да изтриете тази маса?</p>
 
-        <!-- СНИМКА -->
-        <div class="details-image">
-            <img src="@GetTableImage(Model.Description)" alt="Table image" />
-        </div>
-
-        <!-- ИНФО -->
         <div class="details-info">
             <div class="info-box">🪑 Маса №@Model.TableNumber</div>
             <div class="info-box">📝 @Model.Description</div>
             <div class="info-box">👥 @Model.Count места</div>
         </div>
 
-        <!-- FORM -->
         <form asp-action="Delete" method="post" class="details-buttons mt-4">
             <input type="hidden" asp-for="Id" />
 
             <button type="submit" class="btn btn-danger">
-                🗑 Изтрий
+                Изтрий
             </button>
-
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
-                Отмени
-            </a>
 
             <a asp-action="Index" class="btn btn-secondary">
                 Назад
