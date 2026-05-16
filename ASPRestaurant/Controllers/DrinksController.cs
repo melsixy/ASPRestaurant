@@ -66,6 +66,24 @@ namespace ASPRestaurant.Controllers
                 return View(drink);
             }
 
+            if (string.IsNullOrWhiteSpace(drink.Name))
+            {
+                ModelState.AddModelError("Name", "Моля, въведи напитка!");
+                return View(drink);
+            }
+
+            if (drink.Litre == null)
+            {
+                ModelState.AddModelError("Litre", "Моля, въведи количество!");
+                return View(drink);
+            }
+
+            if (drink.Price <= 0)
+            {
+                ModelState.AddModelError("Price", "Моля, въведи валидна цена!");
+                return View(drink);
+            }
+
             if (coverImageFile != null && coverImageFile.Length > 0)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(coverImageFile.FileName);

@@ -37,32 +37,37 @@
 
             <h3 class="mt-4">Избери място</h3>
 
+
             <div class="table-modern-grid">
 
-                <div class="table-modern @(Model.TableId == 1 ? "selected" : "")" onclick="selectTable(1)">
+                <div class="table-modern @(Model.TableId == 1 ? "selected" : "")"
+                     onclick="selectTable(this, 1)">
                     <img src="/images/seaview.png" />
                     <div class="overlay">🌊 Гледка към морето</div>
                 </div>
 
-                <div class="table-modern @(Model.TableId == 2 ? "selected" : "")" onclick="selectTable(2)">
+                <div class="table-modern @(Model.TableId == 2 ? "selected" : "")"
+                     onclick="selectTable(this, 2)">
                     <img src="/images/beachview.png" />
                     <div class="overlay">🏖 Плаж</div>
                 </div>
 
-                <div class="table-modern @(Model.TableId == 3 ? "selected" : "")" onclick="selectTable(3)">
+                <div class="table-modern @(Model.TableId == 3 ? "selected" : "")"
+                     onclick="selectTable(this, 3)">
                     <img src="/images/gardenview.jpg" />
                     <div class="overlay">🌿 Градина</div>
                 </div>
 
-                <div class="table-modern @(Model.TableId == 4 ? "selected" : "")" onclick="selectTable(4)">
+                <div class="table-modern @(Model.TableId == 4 ? "selected" : "")"
+                     onclick="selectTable(this, 4)">
                     <img src="/images/interior.jpg" />
-                    <div class="overlay">🌇 Тераса</div>
+                    <div class="overlay">🌇 До прозореца</div>
                 </div>
 
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-4">
-                Запази промените
+                Запази
             </button>
 
             <a asp-action="Index" class="btn btn-secondary w-100 mt-2">
@@ -73,15 +78,14 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        function selectTable(id, el) {
-            document.getElementById("TableId").value = id;
+<script>
+    function selectTable(element, id)
+    {
+        document.getElementById("TableId").value = id;
 
-            document.querySelectorAll(".table-modern")
-                .forEach(x => x.classList.remove("selected"));
+        document.querySelectorAll(".table-modern")
+            .forEach(x => x.classList.remove("selected"));
 
-            el.classList.add("selected");
-        }
-    </script>
-}
+        element.classList.add("selected");
+    }
+</script>

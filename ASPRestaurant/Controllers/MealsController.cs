@@ -64,9 +64,19 @@ namespace ASPRestaurant.Controllers
                 ViewData["TypeOrderId"] = new SelectList(_context.TypeOrders, "Id", "Name");
                 return View(meal);
             }
+            if (string.IsNullOrWhiteSpace(meal.Name))
+            {
+                ModelState.AddModelError("Name", "Моля, въведи ястие!");
+                return View(meal);
+            }
             if (meal.Grammage <= 0)
             {
-                ModelState.AddModelError("Grammage", "Моля, въведи грамаж");
+                ModelState.AddModelError("Grammage", "Моля, въведи грамаж!");
+                return View(meal);
+            }
+            if (meal.Price <= 0)
+            {
+                ModelState.AddModelError("Price", "Моля, въведи валидна цена!");
                 return View(meal);
             }
             if (coverImageFile != null && coverImageFile.Length > 0)

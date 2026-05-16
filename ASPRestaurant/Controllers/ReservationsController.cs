@@ -65,6 +65,21 @@ namespace ASPRestaurant.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
+            if (reservation.TableId == 0)
+            {
+                ModelState.AddModelError("", "Моля избери маса!");
+                return View(reservation);
+            }
+
+            if (reservation.Time < new TimeSpan(10, 0, 0) ||
+                reservation.Time > new TimeSpan(23, 59, 0))
+            {
+                ModelState.AddModelError("Time",
+                    "Ресторантът работи от 10:00 до 00:00");
+
+                return View(reservation);
+            }
+
             reservation.RegisterOn = DateTime.Now;
             reservation.ClientId = userId;
 
@@ -85,15 +100,21 @@ namespace ASPRestaurant.Controllers
             var start = reservation.Date.Add(reservation.Time);
             var end = start.AddHours(2);
 
-            bool isTaken = await _context.Reservations.AnyAsync(r =>
-                r.TableId == reservation.TableId &&
-                start < r.Date.Add(r.Time).AddHours(2) &&
-                end > r.Date.Add(r.Time)
-            );
+            var reservations = await _context.Reservations.ToListAsync();
+
+            bool isTaken = reservations.Any(r =>
+            {
+                var rStart = r.Date.Add(r.Time);
+                var rEnd = rStart.AddHours(2);
+
+                return r.TableId == reservation.TableId &&
+                       start < rEnd &&
+                       end > rStart;
+            });
 
             if (isTaken)
             {
-                ModelState.AddModelError("", "Масата е заета.");
+                ModelState.AddModelError("", "Масата е заета!");
                 return View(reservation);
             }
 
@@ -101,19 +122,23 @@ namespace ASPRestaurant.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
-        }  
-        
+        }
         // GET: Edit
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+                return NotFound();
 
-            var reservation = await _context.Reservations.FindAsync(id);
+            var userId = _userManager.GetUserId(User);
 
-            if (reservation == null) return NotFound();
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(r =>
+                    r.Id == id &&
+                    (User.IsInRole("Admin") || r.ClientId == userId));
 
-            ViewData["TableId"] = new SelectList(_context.Tables, "Id", "TableNumber", reservation.TableId);
+            if (reservation == null)
+                return NotFound();
 
             return View(reservation);
         }
@@ -148,6 +173,24 @@ namespace ASPRestaurant.Controllers
                 return View(reservation);
             }
 
+            var start = reservation.Date.Add(reservation.Time);
+            var end = start.AddHours(2);
+
+            var reservations = await _context.Reservations.ToListAsync();
+
+            bool isTaken = reservations.Any(r =>
+                r.Id != id &&
+                r.TableId == reservation.TableId &&
+                start < r.Date.Add(r.Time).AddHours(2) &&
+                end > r.Date.Add(r.Time)
+            );
+
+            if (isTaken)
+            {
+                ModelState.AddModelError("", "Масата е заета за този час!");
+                return View(reservation);
+            }
+
             existing.NumberOfPeople = reservation.NumberOfPeople;
             existing.Date = reservation.Date;
             existing.Time = reservation.Time;
@@ -157,6 +200,7 @@ namespace ASPRestaurant.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         // GET: Delete
         public async Task<IActionResult> Delete(int? id)
         {

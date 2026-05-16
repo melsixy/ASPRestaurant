@@ -10,58 +10,87 @@
 
         <h1>Направете резервация</h1>
 
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="text-danger fw-bold mb-3">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
         <form asp-action="Create" method="post">
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="row">
+
                 <div class="col-md-6">
                     <label>Дата</label>
                     <input asp-for="Date" type="date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label>Час</label>
-                    <input asp-for="Time" type="time" class="form-control" />
+
+                    <input asp-for="Time"
+                           type="time"
+                           class="form-control"
+                           min="10:00"
+                           max="23:59" />
+
+                    <span asp-validation-for="Time" class="text-danger"></span>
                 </div>
+
             </div>
 
             <div class="mt-3">
                 <label>Брой хора</label>
                 <input asp-for="NumberOfPeople" type="number" class="form-control" min="1" max="20" />
+                <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
             </div>
 
-            <input type="hidden" asp-for="TableId" id="TableId" />
+            <input type="hidden" asp-for="TableId" id="TableId" value="@Model.TableId" />
+
+            <span asp-validation-for="TableId" class="text-danger"></span>
 
             <h3 class="mt-4">Избери място</h3>
 
             <div class="table-modern-grid">
 
-                <div class="table-modern" onclick="selectTable(1)">
+                <div class="table-modern @(Model.TableId == 1 ? "selected" : "")"
+                     onclick="selectTable(this, 1)">
                     <img src="/images/seaview.png" />
                     <div class="overlay">🌊 Гледка към морето</div>
                 </div>
 
-                <div class="table-modern" onclick="selectTable(2)">
+                <div class="table-modern @(Model.TableId == 2 ? "selected" : "")"
+                     onclick="selectTable(this, 2)">
                     <img src="/images/beachview.png" />
                     <div class="overlay">🏖 Плаж</div>
                 </div>
 
-                <div class="table-modern" onclick="selectTable(3)">
+                <div class="table-modern @(Model.TableId == 3 ? "selected" : "")"
+                     onclick="selectTable(this, 3)">
                     <img src="/images/gardenview.jpg" />
                     <div class="overlay">🌿 Градина</div>
                 </div>
 
-                <div class="table-modern" onclick="selectTable(4)">
+                <div class="table-modern @(Model.TableId == 4 ? "selected" : "")"
+                     onclick="selectTable(this, 4)">
                     <img src="/images/interior.jpg" />
-                    <div class="overlay">🌇 Тераса</div>
+                    <div class="overlay">🌇 До прозореца</div>
                 </div>
 
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-4">
-                Запази резервация
+                Запази
             </button>
+
+            <a asp-action="Index" class="btn btn-secondary w-100 mt-2">
+                Назад
+            </a>
 
         </form>
 
@@ -69,16 +98,14 @@
 
 </div>
 
-@section Scripts {
 <script>
-function selectTable(id) {
+    function selectTable(element, id)
+    {
+        document.getElementById("TableId").value = id;
 
-    document.getElementById("TableId").value = id;
+        document.querySelectorAll(".table-modern")
+            .forEach(x => x.classList.remove("selected"));
 
-    document.querySelectorAll(".table-modern")
-        .forEach(x => x.classList.remove("selected"));
-
-    event.currentTarget.classList.add("selected");
-}
+        element.classList.add("selected");
+    }
 </script>
-}

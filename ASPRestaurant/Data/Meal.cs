@@ -10,7 +10,7 @@ namespace ASPRestaurant.Data
 
         public string Alergens { get; set; } 
 
-        public double? Grammage { get; set; }
+        public double Grammage { get; set; }
 
 
         [Column(TypeName = "decimal(10,2)")]

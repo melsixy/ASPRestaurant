@@ -373,6 +373,11 @@ html {
     box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
+    .table-modern.selected {
+        border: 4px solid blue;
+    }
+
+
     .table-modern img {
         width: 100%;
         height: 180px;
